@@ -1,0 +1,49 @@
+@import url('https://fonts.cdnfonts.com/css/quark');
+nav ul{
+  display: flex;
+  /* flex-wrap: wrap; */
+  list-style: none;
+  justify-content: center;
+
+
+
+ 
+}
+nav ul li{
+  background-color: rgb(255, 187, 0);
+  height: 40px;
+  padding-top: 15px;
+  padding-left: 5px;
+  padding-right: 5px;
+
+}
+nav ul li a{
+  color: #ffffff;
+  font-weight: bold;
+  padding: 8px 15px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  font-size: 90%;
+  transition-timing-function: linear ;
+  transition: .2s;
+}
+nav ul li a.active,
+nav ul li a:hover{
+  color: rgba(0, 0, 0, 0.452);
+  background: rgb(255, 255, 255);
+  border: 2px solid rgb(255, 255, 255);
+  /* font-size: 17px; */
+  transition: .2s;
+  font-family: 'Quark', sans-serif;
+  font-weight: bold;                              
+  font-display: swap;
+  font-style: normal;
+  
+}
+
+hr {
+  width: 75%;
+  height:2px; border:0; 
+  background:radial-gradient(circle, rgb(255, 153, 0), rgb(255, 196, 0), rgb(251, 255, 0));
+}
