@@ -39,6 +39,7 @@ async function login() {
       localStorage.setItem("usuario", usuario.value)
       localStorage.setItem("senha", senha.value)
       localStorage.setItem("Token", loginRes.value.token)
+      
       window.location.href='/ordemServico'
       } catch (error) {
         console.error('Error fetching servico:', error)
