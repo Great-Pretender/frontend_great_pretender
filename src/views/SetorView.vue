@@ -230,7 +230,11 @@ const setores = ref([])
 
 async function buscarSetor() {
   try {
-    setores.value = (await axios.get('setor')).data
+    setores.value = (await axios.get('setor', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
     console.log(setores.value)
   } catch (error) {
     console.error('Error fetching servico:', error)
