@@ -538,14 +538,19 @@ import { RouterLink } from 'vue-router'
 import { onMounted } from 'vue'
 import axios from 'axios'   
 import { ref } from 'vue'
+
 const contratos = ref([])
 const clientes = ref([])
 const erro = ref()
-
+var TokenStorage = localStorage.getItem("Token");
 
 async function buscarContrato() {
   try {
-    const response = await axios.get('contrato')
+    const response = await axios.get('contrato', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })
     contratos.value = response.data
   } catch (error) {
     console.error('Error fetching servico:', error)
@@ -554,7 +559,11 @@ async function buscarContrato() {
 
 async function buscarCliente() {
   try {
-    const response = await axios.get('cliente')
+    const response = await axios.get('cliente', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })
     clientes.value = response.data
   } catch (error) {
     console.error('Error fetching servico:', error)
@@ -589,7 +598,11 @@ const formatMONETARIO = (el) => {
 
 async function atualizar(){
   try {
-    contratos.value = (await axios.get('contrato')).data
+    contratos.value = (await axios.get('contrato', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
   }
   catch(ex) {
     erro.value = (ex as Error).message
@@ -598,7 +611,11 @@ async function atualizar(){
 const cliente = ref()
 const cli = ref()
 async function getCliente() {
-    cli.value =  (await axios.get(`cliente/${cliente.value}`)).data
+    cli.value =  (await axios.get(`cliente/${cliente.value}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
 }
 
 async function cadastrarContrato() {
@@ -614,9 +631,11 @@ async function cadastrarContrato() {
       "descricao_contrato": nivel_inspecao.value,
       "clausulas_contrato": clausulas_contrato.value,
       "cliente": cli.value
-    }
-
-    )
+    }, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })
     window.location.href='/contrato'
   }
   catch(ex){
