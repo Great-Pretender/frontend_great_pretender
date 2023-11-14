@@ -620,7 +620,7 @@ async function cadastrarUsuario() {
         'Authorization': TokenStorage
       }
       })
-      //window.location.href='/usuario'
+      window.location.href='/usuario'
     }catch(ex){
     erro.value = (ex as Error).message;
   }
