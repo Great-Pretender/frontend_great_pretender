@@ -126,18 +126,28 @@
   });
 };
 
+//Variaveis do localstorage
+var TokenStorage = localStorage.getItem("Token");
 
 
 
   //buscando todos os setores do banco
   async function getSetor() {
-    set.value =  (await axios.get(`setor/${setor.value}`)).data
+    set.value =  (await axios.get(`setor/${setor.value}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
   }
 
   //depois de realizar alguma ação ele volta pra pagina inicial e atualiza com as informações do banco
   async function atualizar(){
   try {
-    servicos.value = (await axios.get('servico')).data
+    servicos.value = (await axios.get('servico', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
 
   }
   catch(ex) {
@@ -155,8 +165,11 @@
       "custo": custo.value.replace("R$","").replace(" ",""),
       "duracao_dias": duracao_dias.value,
       "setor": set.value
+      },{
+      headers: {
+        'Authorization': TokenStorage
       }
-    )
+      })
     atualizar();
     window.location.href='/Servico'
   } catch(ex){
@@ -168,7 +181,12 @@
 //Função para buscar os setores do banco
 async function buscarSetor() {
   try {
-    const response = await axios.get('setor')
+    const response = await axios.get('setor', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })
+
     setores.value = response.data
   } catch (error) {
     console.error('Error fetching servico:', error)
@@ -187,7 +205,12 @@ formatMONETARIO(custoInput);
 
 async function buscarSetores() {
   try {
-    const response = await axios.get('setor')
+    const response = await axios.get('setor', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })
+
     setores.value = response.data
   } catch (error) {
     console.error('Error fetching setor:', error)

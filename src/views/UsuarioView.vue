@@ -58,7 +58,7 @@
         </div>
         <div class="cargo">
           <label>Cargo </label>
-          <select class="cargo" v-model="cargo" @change="getCargo()">
+          <select class="cargo" v-model="cargo">
               <option value="ROLE_TECNICO"> Técnico</option>
               <option value="ROLE_ADMIN"> Administrador</option>
               <option value="ROLE_SUPERVISOR"> Supervisor</option>
@@ -533,7 +533,11 @@ const cpf = ref('')
 const nome = ref('')
 const email = ref('')
 const senha = ref('')
-var cargo = ref('')
+const cargo = ref('')
+
+
+//Variaveis do localstorage
+var TokenStorage = localStorage.getItem("Token");
 
 const formatCPF = (el) => {
   el.addEventListener('input', (e) => {
@@ -555,9 +559,11 @@ const formatCPF = (el) => {
 
 async function buscarUsuario() {
   try {
-    usuarios.value = (await axios.get('usuario')).data
-    console.log(usuarios.value)
-    
+    usuarios.value = (await axios.get('usuario', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data    
   } catch (error) {
     console.error('Error fetching servico:', error)
   }
@@ -565,8 +571,11 @@ async function buscarUsuario() {
 
 async function buscarSetor() {
   try {
-    setores.value = (await axios.get('setor')).data
-    console.log(setores.value)
+    setores.value = (await axios.get('setor', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
   } catch (error) {
     console.error('Error fetching servico:', error)
   }
@@ -574,7 +583,11 @@ async function buscarSetor() {
 
 async function atualizar(){
   try {
-    usuarios.value = (await axios.get('usuario')).data
+    usuarios.value = (await axios.get('usuario', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
   }
   catch(ex) {
     erro.value = (ex as Error).message
@@ -584,29 +597,31 @@ const setor = ref()
 const set = ref()
 
 async function getSetor() {
-    set.value =  (await axios.get(`setor/${setor.value}`)).data
-    console.log(set.value)
-}
-
-async function getCargo() {
-  console.log(cargo)
+    set.value =  (await axios.get(`setor/${setor.value}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
 }
 
 async function cadastrarUsuario() {
     try {
-    await axios.post('usuario', {
-      "cpf": cpf.value.replaceAll(".","").replace("-",""),
-      "nome": nome.value,
-      "email": email.value,
-      "senha": senha.value,
-      "cargo": cargo.value,
-      "setor" : set.value
-    }
-  
-    )
-    window.location.href='/usuario'
-  }
-  catch(ex){
+      axios.post('usuario', {
+
+        "cpf": cpf.value.replaceAll(".","").replace("-",""),
+        "nome": nome.value,
+        "email": email.value,
+        "senha": senha.value,
+        "cargo": cargo.value,
+        "setor" : set.value
+
+      },{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
+      window.location.href='/usuario'
+    }catch(ex){
     erro.value = (ex as Error).message;
   }
   atualizar(); 

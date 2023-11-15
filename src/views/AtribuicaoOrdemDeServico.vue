@@ -103,7 +103,11 @@ const serv = ref()
 
 async function getValoresOrdem() {
   try {
-    ordem.value = (await axios.get(`ordemdeservico/${id}`)).data
+    ordem.value = (await axios.get(`ordemdeservico/${id}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
     setorr.value = ordem.value.setor
     usuario.value = ordem.value.usuario
     cliente.value = ordem.value.cliente
@@ -124,6 +128,7 @@ async function getValoresOrdem() {
 async function getAtribuicoesPorOrdem() {
   try {
     const response = await axios.post('atribuicao/idOrdem', {
+      
       id: ordem.value.id
     })
     atribuicoes.value = response.data

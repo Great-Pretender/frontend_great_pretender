@@ -227,10 +227,16 @@ import axios from 'axios'
 import { ref } from 'vue'
 const setores = ref([])
 
+//Variaveis do localstorage
+var TokenStorage = localStorage.getItem("Token");
 
 async function buscarSetor() {
   try {
-    setores.value = (await axios.get('setor')).data
+    setores.value = (await axios.get('setor', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
     console.log(setores.value)
   } catch (error) {
     console.error('Error fetching servico:', error)
@@ -239,7 +245,11 @@ async function buscarSetor() {
 
 async function atualizar(){
   try {
-    setores.value = (await axios.get('setor')).data
+    setores.value = (await axios.get('setor', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
   }
   catch(ex) {
     erro.value = (ex as Error).message
@@ -252,8 +262,11 @@ async function cadastrarSetor() {
   try {
     await axios.post('setor', {
       "nome": nome.value,
-    }
-    )
+    },{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
     window.location.href='/setor'
   }
   catch(ex){

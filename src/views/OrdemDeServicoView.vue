@@ -170,9 +170,16 @@ const dataFim = ref()
 var statusOrdem = ref('')
 var statusAprovacao = ref('')
 
+//Variaveis do localstorage
+var TokenStorage = localStorage.getItem("Token");
+
 async function buscarClientes() {
   try {
-    clientes.value = (await axios.get('cliente')).data
+    clientes.value = (await axios.get('cliente', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data    
   } catch (error) {
     console.error('Error fetching setores:' + error)
   }
@@ -180,7 +187,11 @@ async function buscarClientes() {
 
 async function buscarSetores() {
   try {
-    setores.value = (await axios.get('setor')).data
+    setores.value = (await axios.get('setor', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data    
   } catch (error) {
     console.error('Error fetching setores:' + error)
   }
@@ -188,7 +199,11 @@ async function buscarSetores() {
 
 async function buscarServicos() {
   try {
-    servicos.value = (await axios.get('servico')).data
+    servicos.value = (await axios.get('servico', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data    
   } catch (error) {
     console.error('Erro! :' + error)
   }
@@ -196,7 +211,11 @@ async function buscarServicos() {
 
 async function buscarOrdens() {
   try {
-    ordens.value = (await axios.get('ordemdeservico')).data
+    ordens.value = (await axios.get('ordemdeservico', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data    
   } catch (error) {
     console.error('Erro! :' + error)
   }
@@ -208,7 +227,11 @@ const usu = ref()
 
 async function getCliente() {
   try {
-    cli.value = (await axios.get(`cliente/${cliente.value}`)).data
+    cli.value = (await axios.get(`cliente/${cliente.value}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data    
   } catch (error) {
     console.error('Erro! :' + error)
   }
@@ -216,7 +239,11 @@ async function getCliente() {
 
 async function getSetor() {
   try {
-    set.value = (await axios.get(`setor/${setor.value}`)).data
+    set.value = (await axios.get(`setor/${setor.value}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data    
     usuarios.value = []
     getUsuarioPorSetor(set.value)
   } catch (error) {
@@ -226,7 +253,11 @@ async function getSetor() {
 
 async function getUsuario() {
   try {
-    usu.value = (await axios.get(`usuario/${usuario.value}`)).data
+    usu.value = (await axios.get(`usuario/${usuario.value}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data    
   } catch (error) {
     console.error('Erro! :' + error)
   }
@@ -238,7 +269,11 @@ async function getUsuarioPorSetor(setorSelecionado) {
     const response = await axios.post('usuario/idSetor', {
       id: setorUsuario.id,
       nome: setorUsuario.nome
-    })
+    },{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
 
     usuarios.value = response.data
   } catch (error) {
@@ -257,7 +292,11 @@ async function cadastrarOrdem() {
       data_fim: dataFim.value,
       status_ordem: 'Pendente',
       status_aprovacao: 'Pendente'
-    })
+    },{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
 
     servicos.value = []
     buscarOrdens()
@@ -282,7 +321,12 @@ try {
       data_fim: ordem.data_fim,
       status_ordem: statusOrdem.value,
       status_aprovacao: ordem.status_aprovacao
-  })
+  },{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
+
   let obj = {}
   obj.value = response.data
   buscarOrdens();
@@ -306,7 +350,11 @@ try {
       data_fim: ordem.data_fim,
       status_ordem:  ordem.status_ordem,
       status_aprovacao: statusAprovacao.value
-  })
+  },{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
   let obj = {}
   obj.value = response.data
   buscarOrdens();
@@ -330,7 +378,11 @@ try {
       data_fim: ordem.data_fim,
       status_ordem:  ordem.status_ordem,
       status_aprovacao: ordem.status_aprovacao
-  })
+  },{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
   let obj = {}
   obj.value = response.data
   buscarOrdens();
@@ -345,7 +397,11 @@ try {
 async function deletar(ordem) {
   if (confirm('Deseja realmente deletar essa ordem?')) {
   // Save it!
-  await axios.delete(`ordemdeservico/${ordem.id}`)
+  await axios.delete(`ordemdeservico/${ordem.id}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })
   buscarOrdens();
     
 } else {

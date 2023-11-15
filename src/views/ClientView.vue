@@ -143,13 +143,17 @@ const ClientUF = ref('');
 const clientes = ref('');
 
 //conectando ao banco em nuvem
-
+var TokenStorage = localStorage.getItem("Token");
 
 //buscando todos os clientes do banco
 const cliente = ref()
 const cli = ref()
 async function getCliente() {
-  cli.value = (await axios.get(`cliente/${cliente.value}`)).data
+  cli.value = (await axios.get(`cliente/${cliente.value}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
 }
 
 const formatCNPJ = (el) => {
@@ -191,7 +195,11 @@ const formatTELEFONE = (el) => {
 //depois de realizar alguma ação ele volta pra pagina inicial clientes e atualiza com as informações da tabela
 async function atualizar() {
   try {
-    clientes.value = (await axios.get('cliente')).data
+    clientes.value = (await axios.get('cliente', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
   }
   catch (ex) {
     erro.value = (ex as Error).message
@@ -214,8 +222,11 @@ async function cadastrarCliente() {
       "cidade": ClientCity.value,
       "estado": ClientUF.value,
 
-    }
-    )
+    }, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })
     atualizar();
     window.location.href = '/client'
   } catch (ex) {

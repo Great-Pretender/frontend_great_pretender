@@ -104,6 +104,9 @@
   const setor = ref('');
   const itemSetor = ref('');
 
+  //Variaveis do localstorage
+var TokenStorage = localStorage.getItem("Token");
+
   //conectando ao banco em nuvem
  // axios.defaults.baseURL = 'https://8080-greatpreten-backendgrea-t1i4c91qf2n.ws-us105.gitpod.io/'
   
@@ -111,7 +114,11 @@
   var servico = ref()
   const serv = ref()
   async function getServico() {
-    serv.value =  (await axios.get(`servico/${servico.value}`)).data
+    serv.value =  (await axios.get(`servico/${servico.value}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
     console.log(servico.value)
     console.log (serv.value)
   }
@@ -120,7 +127,11 @@
   //depois de realizar alguma ação ele volta pra pagina inicial e atualiza com as informações do banco
   async function atualizar(){
   try {
-    itens.value = (await axios.get('item')).data
+    itens.value = (await axios.get('item', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
   }
   catch(ex) {
      erro.value = (ex as Error).message
@@ -138,8 +149,11 @@
       "validade": ItemValidation.value,
       "setor": itemSetor.value,
       "servico": serv.value
+      },{
+      headers: {
+        'Authorization': TokenStorage
       }
-    )
+      })
     atualizar();
     window.location.href='/Item'
   } catch(ex){
@@ -150,7 +164,11 @@
  //Função para buscar os setores do banco
 async function buscarSetor() {
   try {
-    const response = await axios.get('setor')
+    const response = await axios.get('setor', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })
     SelectionSection.value = response.data
   } catch (error) {
     console.error('Error fetching servico:', error)
@@ -160,7 +178,11 @@ async function buscarSetor() {
  //Função para buscar os servicos do banco
  async function buscarServico() {
   try {
-    const response = await axios.get('servico')
+    const response = await axios.get('servico', {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })
     SelectionServico.value = response.data
   } catch (error) {
     console.error('Error fetching servico:', error)
