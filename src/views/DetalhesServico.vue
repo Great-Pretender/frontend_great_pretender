@@ -295,6 +295,8 @@ button {
   var erro = ref()
   var inputs,index
   
+  var TokenStorage = localStorage.getItem("Token");
+
   interface Setor {
     id: number,
     nome: string
@@ -320,22 +322,38 @@ var servico = ref('')
 
   }
   async function deletar() {
-      await axios.delete(`servico/${id}`)
+      await axios.delete(`servico/${id}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
       window.location.href='/Servico'
   }
 
   async function getSetor() {
-    set.value =  (await axios.get(`setor/${setor}`)).data
+    set.value =  (await axios.get(`setor/${setor}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })).data
   }
 
   async function getSetores() {
-    setores.value = (await axios.get(`setor`)).data
+    setores.value = (await axios.get(`setor`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })).data
     console.log(setores.value);
 }
 
   async function getServico() {
     try {
-      servico.value =  (await axios.get(`servico/${id}`)).data
+      servico.value =  (await axios.get(`servico/${id}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })).data
       nome.value = servico.value.nome;
       descricao.value = servico.value.descricao;
       custo.value = servico.value.custo;
@@ -367,9 +385,11 @@ var servico = ref('')
       "custo": custo.value,
       "duracao_dias": duracao_dias.value,
       "setor": set.value 
-    }
-
-    )
+    },{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
     window.location.href='/Servico'
     }
     catch(ex){

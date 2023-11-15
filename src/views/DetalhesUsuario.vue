@@ -83,6 +83,10 @@ var cpf = ref('')
 var nome = ref('')
 var email = ref('')
 var senha = ref('')
+
+//Variaveis do localstorage
+var TokenStorage = localStorage.getItem("Token");
+
 interface Setor {
     id: number,
     nome: string
@@ -96,16 +100,28 @@ var cargo = ref('')
 var erro = ref('')
 
 async function getSetor() {
-    set.value =  (await axios.get(`setor/${setor}`)).data
+    set.value =  (await axios.get(`setor/${setor}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
 }
 
 async function getSetores() {
-    setores.value =  (await axios.get(`setor`)).data
+    setores.value =  (await axios.get(`setor`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
 }
 
 async function getUsuario() {
   try {
-    usuario.value =  (await axios.get(`usuario/${id}`)).data
+    usuario.value =  (await axios.get(`usuario/${id}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
     cpf.value = usuario.value.cpf
     nome.value = usuario.value.nome
     email.value = usuario.value.email
@@ -139,7 +155,11 @@ async function ativarInputs() {
 
 }
 async function deletar() {
-    await axios.delete(`usuario/${id}`)
+    await axios.delete(`usuario/${id}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })
     window.location.href='/usuario'
 }
 
@@ -153,9 +173,11 @@ async function atualizar() {
         "senha" : senha.value,
         "setor": set.value,
         "cargo": cargo.value
-        }
-
-    )
+        }, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })
     window.location.href='/usuario'
   }
   catch(ex){

@@ -100,6 +100,8 @@ import axios from 'axios'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router';
 
+//Variaveis do localstorage
+var TokenStorage = localStorage.getItem("Token");
 
 const setor = ref()
 const route = useRoute();
@@ -111,7 +113,11 @@ inputs = document.getElementsByTagName('input')
 
 async function getSetor() {
   try {
-    setor.value =  (await axios.get(`setor/${id}`)).data
+    setor.value =  (await axios.get(`setor/${id}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })).data
     nome.value = setor.value.nome
     console.log(setor.value)
   }
@@ -131,7 +137,11 @@ async function ativarInputs() {
 }
 
 async function deletar() {
-    await axios.delete(`setor/${id}`)
+    await axios.delete(`setor/${id}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
     window.location.href='/setor'
 }
 async function atualizarSetor() {
@@ -139,8 +149,11 @@ try {
 await axios.put(`setor/${id}`, {
   "id":  setor.value.id,
   "nome": nome.value
-}
-)
+},{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
 window.location.href='/setor'
 }
 catch(ex){

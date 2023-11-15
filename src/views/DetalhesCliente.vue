@@ -397,8 +397,15 @@ button {
     var estado = ref('');
     var erro = ref('')
     const cli = ref()
+
+    var TokenStorage = localStorage.getItem("Token");
+
 async function getCliente() {
-    cli.value =  (await axios.get(`cliente/${id}`)).data
+    cli.value =  (await axios.get(`cliente/${id}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })).data
     cnpj.value = cli.value.cnpj
     nome_responsavel.value = cli.value.nome_responsavel
     nome_fantasia.value  = cli.value.nome_fantasia
@@ -428,8 +435,11 @@ async function atualizarCliente() {
       "bairro": bairro.value,
       "cidade": cidade.value,
       "estado": estado.value
-    }
-    )
+    },{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
     window.location.href='/client'
     }
     catch(ex){
@@ -449,7 +459,11 @@ async function ativarInputs() {
 
 }
 async function deletar() {
-    await axios.delete(`cliente/${id}`)
+    await axios.delete(`cliente/${id}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
     window.location.href='/Client'
 }
 

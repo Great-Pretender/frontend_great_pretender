@@ -278,9 +278,16 @@ var descricao_contrato = ref('')
 var clausulas_contrato = ref('')
 var cliente = ref()
 const cli = ref({})
+
+var TokenStorage = localStorage.getItem("Token");
+
 async function getContrato() {
   try {
-    contrato.value =  (await axios.get(`contrato/${id}`)).data
+    contrato.value =  (await axios.get(`contrato/${id}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })).data
     numero_contrato.value = contrato.value.numero_contrato
     valor_contrato.value = contrato.value.valor_contrato
     valor_multa.value = contrato.value.valor_multa
@@ -304,7 +311,11 @@ async function getContrato() {
 }
 
 async function getCliente() {
-    cli.value =  (await axios.get(`cliente/${cliente.value.id}`)).data
+    cli.value =  (await axios.get(`cliente/${cliente.value.id}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })).data
 }
 var inputs,index
 
@@ -321,7 +332,11 @@ async function ativarInputs() {
 
 }
 async function deletar() {
-    await axios.delete(`contrato/${id}`)
+    await axios.delete(`contrato/${id}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
     window.location.href='/contrato'
 }
 
@@ -340,9 +355,11 @@ async function atualizar() {
       "descricao_contrato": descricao_contrato.value,
       "clausulas_contrato": clausulas_contrato.value,
       "cliente": cliente.value
-    }
-
-    )
+    },{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
     window.location.href='/contrato'
   }
   catch(ex){

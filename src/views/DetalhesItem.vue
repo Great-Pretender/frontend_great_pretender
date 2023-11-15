@@ -289,6 +289,8 @@ var servicos = ref();
 var inputs,index;
 var item = ref()
 
+var TokenStorage = localStorage.getItem("Token");
+
 interface Setor {
     id: number,
     nome: string
@@ -320,7 +322,11 @@ var erro = ref("")
 
 async function getItem() {
   try {
-    item.value = (await axios.get(`item/${id}`)).data
+    item.value = (await axios.get(`item/${id}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })).data
     console.log(item.value)
     nome.value = item.value.nome
     marca.value = item.value.marca
@@ -346,12 +352,20 @@ async function getItem() {
 }
 
 async function getServicos() {
-  servicos.value = (await axios.get(`servico`)).data
+  servicos.value = (await axios.get(`servico`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })).data
   console.log(servicos.value);
 }
 
 async function getServico() {
-  serv.value = (await axios.get(`servico/${servico}`)).data
+  serv.value = (await axios.get(`servico/${servico}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })).data
   console.log(serv.value);
 }
 
@@ -366,7 +380,11 @@ inputs = document.getElementsByTagName('input')
   }
 
 async function deletar() {
-  await axios.delete(`item/${id}`)
+  await axios.delete(`item/${id}`,{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
   window.location.href = '/Item'
 }
 
@@ -381,9 +399,11 @@ async function atualizar() {
       "validade": validade.value,
       "setor": setor.value,
       "servico": serv.value
-    }
-
-    )
+    },{
+      headers: {
+        'Authorization': TokenStorage
+      }
+      })
     window.location.href = '/Item'
   }
   catch (ex) {
