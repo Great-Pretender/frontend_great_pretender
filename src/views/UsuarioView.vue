@@ -290,7 +290,7 @@ h1 {
 table {
   margin-left: auto;
   margin-right: auto;
-  border: 1px solid rgba(85, 84, 84, 0.281);
+  border: 1px solid rgba(85, 84, 84, 0);
   border-radius: 10px;
 }
 tr {
@@ -388,13 +388,14 @@ input[type="radio"] {
   margin: 0 auto;
   padding: 5%;
   background: #FFF;
-  box-shadow: 0 4px 0 0 rgba(0,0,0,0.015);
+  box-shadow: 0 2px 0 0 rgba(0,0,0,0.015);
   position: absolute;
   /* Multiple .tab Height By Number Of .tab(s) To Get Position Absolute Top */
   top: 195px;
   border:  1px solid black;
   left: 0;
   display: none;
+  margin-bottom: 10px;
   z-index: 1;
 }
 .tabContent h1, p {
@@ -497,13 +498,13 @@ input[type="radio"] {
     margin-left: -5px;
   }
   .tabContent {
-    width: 1000px;
+    width: 1100px;
     position: absolute;
     top: 30px;
     left: 0;
     margin-left: -75%;
-    border: 1px solid rgba(10, 8, 8, 0.176);
-    box-shadow: 5px 10px #88888833;
+    border: 1px solid rgba(10, 8, 8, 0.096);
+    box-shadow: 2px 2px #8888883d;
     border-radius: 20px;
   }
 }

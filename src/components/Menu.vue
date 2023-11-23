@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 
-function abrirMenu() {
- 
-}
+console.log("teste")
 </script>
-
 <template>
-    <div>
+    <!-- <div>
         <nav>
           <ul>
             <li><RouterLink to="/">Landing Page</RouterLink></li>
@@ -21,171 +18,217 @@ function abrirMenu() {
         </ul>
       </nav>
       <hr>
-    </div>
-    <div>
-      <ul class="menu">
+    </div> -->
 
-<li title="home"><a href="#" class="menu-button home">menu</a></li>
-<li title="Laudo"><a href="#" class="fa-file-lines">Laudo</a></li>
-<li title="Usuários"><RouterLink to="/usuario" class="active about">Usuário</RouterLink></li>
-<li title="Ordem de Serviço"><RouterLink to="/ordemServico" class="fa-file-circle-plus">Ordem de Servico</RouterLink></li>
-<li title="Setor"><RouterLink to="/setor" class="fa-building-o">Setores</RouterLink></li>
-<li title="pencil"><RouterLink to="/client" class="fa-people-group">Clientes</RouterLink></li>
-<li title="contact"><RouterLink to="/Servico" class="fa-server">Serviços</RouterLink></li>
-<li title="contact"><RouterLink to="/contrato" class="fa-file-contract">Contratos</RouterLink></li>
-<li title="archive"><RouterLink to="/Item" class="fa-wrench">Items</RouterLink></li>
-
-</ul>
-
-<ul class="menu-bar">
-  <li><a href="#" class="menu-button" >Menu</a></li>
-  <li><a href="#">Home</a></li>
-  <li><a href="#">Profile</a></li>
-  <li><a href="#">Editorial</a></li>
-  <li><a href="#">About</a></li>
-</ul>
-    </div>
+<input type="checkbox" id="check">
+    <label for="check">
+      <i class="fas fa-bars" id="btn"></i>
+      <i class="fas fa-times" id="cancel"></i>
+    </label>
+    <div class="sidebar">
+      <header>Menu</header>
+      <RouterLink to="/">
+        <i class="fas fa-file"></i>
+        <span>Landing Page</span>
+      </RouterLink>
+      <RouterLink to="/ordemServico">
+        <i class="fas fa-table"></i>
+        <span>OS</span>
+      </RouterLink>
+      <RouterLink to="/usuario">
+        <i class="fas fa-users"></i>
+        <span>Usuários</span>
+      </RouterLink>
+      <RouterLink to="/client">
+        <i class="fas fa-address-book"></i>
+        <span>Clientes</span>
+      </RouterLink>
+      <RouterLink to="/Servico">
+        <i class="fas fa-stream"></i>
+        <span>Serviços</span>
+      </RouterLink>
+      <RouterLink to="/Item">
+        <i class="fas fa-wrench"></i>
+        <span>Itens</span>
+      </RouterLink>
+      <RouterLink to="/setor">
+        <i class="fas fa-building"></i>
+        <span>Setores</span>
+      </RouterLink>
+      <RouterLink to="/contrato">
+        <i class="fas fa-file-lines"></i>
+        <span>Contratos</span>
+      </RouterLink>
+    </div> 
+    
 </template>
 
 <style>
-@import url("//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css");
-.menu, .menu-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    height: 100%;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    background: #f7f7f7;
-    z-index:10;  
-    overflow:hidden;
-    box-shadow: 2px 0 18px rgba(0, 0, 0, 0.26);
+*{
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
 }
-.menu li a{
-  display: inline-block;
-  text-indent: -500em;
-  height: 5em;
-  width: 5em;
-  line-height: 5em;
-  text-align:center;
-  color: #72739f;
-  position: relative;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  transition: background 0.1s ease-in-out;
+:root {
+  --accent-color: #fff;
+  --gradient-color: #FBFBFB;
 }
-.menu li a:before {
-  font-family: FontAwesome;
-  speak: none;
-  text-indent: 0em;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+
+
+.sidebar{
+  position: fixed;
+  width: 240px;
+  left: -240px;
   height: 100%;
-  font-size: 1.4em;
+  margin-top: -20px;
+  background-color: rgba(255, 255, 255, 0)070;
+  transition: all .5s ease;
 }
-.menu li a.search:before {
-  content: "\f002";
+.sidebar header{
+  font-size: 14px;
+  color: #353535;
+  width: 25%;
+  line-height: 70px;
+  text-align: center;
+  background-color: #fff;
+  user-select: none;
+  font-family: 'Lato', sans-serif;
 }
-.menu li a.archive:before {
-  content: "\f187";
-}
-.menu li a.pencil:before {
-  content: "\f040";
-}
-.menu li a.contact:before {
-  content: "\f003";
-}
-.menu li a.about:before {
-  content: "\f007";
-}
-.menu li a.home:before {
-  content: "\f039";
-}
-.menu-bar li a:hover,
-.menu li a:hover,
-.menu li:first-child a {
-  background: #FFBB00;
-  color: #fff;
-}
-.menu-bar{
-    overflow:hidden;
-    left:5em;
-    z-index:5;
-    width:0;
-    height:0;
-    transition: all 0.1s ease-in-out;
-}
-.menu-bar li a{
+.sidebar a{
   display: block;
-  height: 4em;
-  line-height: 4em;
-  text-align:center;
-  color: #72739f;
-  text-decoration:none;  
-  position: relative;
-  font-family:verdana;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  transition: background 0.1s ease-in-out;
+  height: 55px;
+  width: 65%;
+  color: #353535;
+  line-height: 65px;
+  padding-left: 15px;
+  box-sizing: border-box;
+  border-left: 5px solid transparent;
+  font-family: 'Lato', sans-serif;
+  transition: all .5s ease;
 }
-.menu-bar li:first-child a{
-    height:5em;
-    background: #FFBB00;
-    color: #fff;    
-    line-height:5
+a.active,a:hover{
+  border-left: 5px solid var(--accent-color);
+  color: #fff;
+   background: linear-gradient(to left, var(--accent-color), var(--gradient-color));
 }
+.sidebar a i{
+  font-size: 15px;
+  margin-right: 16px;
+}
+.sidebar a span{
+  letter-spacing: 1px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+#check{
+  display: none;
+}
+label #btn,label #cancel{
+  position: absolute;
+  left: 5px;
+  cursor: pointer;
+  color: white;
+  border-radius: 5px;
+  margin: -60px 12px;
+  font-size: 15px;
+  background-color: rgb(256,197,0);
+  box-shadow:inset 2px 2px 2px 0px rgb(255, 255, 255)0.5),
+    inset -7px -7px 10px 0px rgba(223, 220, 220, 0.1),
+   3.5px 3.5px 20px 0px rgba(243, 237, 237, 0.1),
+   2px 2px 5px 0px rgba(255, 255, 255, 0.1);
+  height: 45px;
+  width: 45px;
+  text-align: center;
+  text-shadow: 2px 2px 3px rgba(255,255,255,0.5);
+  line-height: 45px;
+  transition: all .5s ease;
+}
+label #cancel{
+  opacity: 0;
+  visibility: hidden;
+}
+#check:checked ~ .sidebar{
+  left: 0;
+}
+#check:checked ~ label #btn{
+  margin-left: 245px;
+  opacity: 0;
+  visibility: hidden;
+}
+#check:checked ~ label #cancel{
+  margin-left: 105px;
 
-
-.para{
-    color:#FFBB00;
-    padding-left:100px;
-    font-size:3em;
-    margin-bottom:20px;
+  opacity: 1;
+  visibility: visible;
 }
-
-.open{
-    width:10em;
-    height:100%;
-}
-
-@media all and (max-width: 500px) {
-    .container{
-        margin-top:100px;
-    }
-    .menu{
-        height:5em;
-        width:100%;
-    }
-    .menu li{
-        display:inline-block;
-    }
-    .menu-bar li a{
-        width:100%;
-    }
-    .menu-bar{
-        width:100%;
-        left:0;
-      bottom: 0;
-        height:0;
-    }
-    .open{
-        width:100%;
-        height:auto;
-    }
-    .para{
-    padding-left:5px;
-}  
-}
-@media screen and (max-height: 34em){
-  .menu li,
-  .menu-bar {
-    font-size:70%;
+@media(max-width : 860px){
+  .sidebar{
+    height: auto;
+    width: 70px;
+    left: 0;
+    margin: 100px 0;
+  }
+  header,#btn,#cancel{
+    display: none;
+  }
+  span{
+    position: absolute;
+    margin-left: 23px;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .sidebar a{
+    height: 60px;
+  }
+  .sidebar a i{
+    margin-left: -10px;
+  }
+  a:hover {
+    width: 200px;
+    background: inherit;
+  }
+  .sidebar a:hover span{
+    opacity: 1;
+    visibility: visible;
   }
 }
-@media screen and (max-height: 34em) and (max-width: 500px){
-  .menu{
-        height:3.5em;
-    }
+
+.sidebar > a.active,.sidebar > a:hover:nth-child(even) {
+  --accent-color: rgb(255, 196, 0);
+  --gradient-color: rgb(256,197,0);
+}
+.sidebar a.active,.sidebar > a:hover:nth-child(odd) {
+  --accent-color: rgb(255,196,0);
+  --gradient-color: #ffc400;
+}
+
+
+.frame {
+  width: 50%;
+  height: 30%;
+  margin: auto;
+  text-align: center;
+}
+
+h2 {
+  position: relative;
+  text-align: center;
+  color: #353535;
+
+  font-family: 'Lato', sans-serif;
+  margin: 0;
+  color: #1a1a1a;
+}
+RouterLink {
+  background-color: black;
+}
+
+p {
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  text-align: center;
+  font-size: 16px;
+  color: #000000;
+  margin: 0;
 }
 </style>

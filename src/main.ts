@@ -20,7 +20,7 @@ import router from './router'
 //axios.defaults.baseURL="https://8080-leoadlerr-backendgreatp-2fuzv9zkxh0.ws-us105.gitpod.io/"
 //  axios.defaults.baseURL="http://localhost:8080/"
 // Felipe
-axios.defaults.baseURL = "https://8080-greatpreten-backendgrea-loxpkzrcot8.ws-us106.gitpod.io"
+axios.defaults.baseURL = "https://8080-greatpreten-backendgrea-jekeslr0gtq.ws-us106.gitpod.io"
 
 
 // Guilherme
