@@ -1,13 +1,12 @@
 <template>
   <div id="tabBox">
 
-    
         <div id="clienteOrdem">
             <h3>Selecione Ordens por Cliente:</h3>
             <br>
             <label for="">CLIENTE:
-                <select v-for="cliente in clientes" :key="cliente.id" @change="getCliente()">
-                    <option  :value="cliente.nome_fantasia">
+                <select v-model="cliente">
+                    <option  v-for="cliente in clientes" :key="cliente.id" :value="cliente">
                         {{ cliente.nome_fantasia }}
                     </option>
                 </select>
@@ -142,6 +141,7 @@ var statusAprovacao = ref('')
 const cli = ref()
 
 async function getCliente() {
+  console.log(cliente.value)
   try {
     cli.value = (
       await axios.get(`cliente/${cliente.value}`, {
@@ -163,7 +163,7 @@ async function buscarOrdensPorCliente() {
     const response = await axios.post(
       'ordemdeservico/idCliente',
       {
-        id: cli.value.id
+        id: cliente.value.id
       },{
       headers: {
         'Authorization': TokenStorage
