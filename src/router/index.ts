@@ -15,6 +15,7 @@ import DetalhesItemVue from '@/views/DetalhesItem.vue'
 import ordemServico from '@/views/OrdemDeServicoView.vue'
 import AtribuicaoOrdemDeServico from '@/views/AtribuicaoOrdemDeServico.vue'
 import LoginViewVue from '@/views/LoginView.vue'
+import LaudoViewVue from '@/views/LaudoView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -101,6 +102,11 @@ const router = createRouter({
       path: '/atribuicao/:id',
       name: 'AtribuicaoOrdemDeServico',
       component: AtribuicaoOrdemDeServico
+    },
+    {
+      path: '/laudo',
+      name: 'laudo',
+      component: LaudoViewVue
     }
     ,
     {

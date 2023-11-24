@@ -43,6 +43,10 @@ console.log("teste")
         <i class="fas fa-address-book"></i>
         <span>Clientes</span>
       </RouterLink>
+      <RouterLink to="/laudo">
+        <i class="fas fa-table"></i>
+        <span>Laudos</span>
+      </RouterLink>
       <RouterLink to="/Servico">
         <i class="fas fa-stream"></i>
         <span>Serviços</span>
