@@ -122,8 +122,13 @@
             </tbody>
           </table>
         </div>
+        <div  class="botaoLaudo"  id="gerarLaudo"  :disabled="true">
+      <button @click="gerarLaudo()">GERAR LAUDO</button>
+    </div>
       
   </div>
+
+    
 </template>
 
 <script setup>
@@ -342,6 +347,16 @@ function hideSelectAprovacao(ID) {
   document.getElementById('sta' + ID).hidden = true
 }
 
+function gerarLaudo(){
+  let clienteNome = cliente.value.nome_fantasia;
+  let ordensDoCliente = [];
+  ordens.value.forEach(element => {
+    ordensDoCliente.push(element);
+    
+  });
+  alert("Cliente = "+clienteNome+" Ordens do Cliente: "+ ordensDoCliente);
+}
+
 onMounted(() => {
     buscarClientes();
 })
@@ -365,6 +380,19 @@ onMounted(() => {
 .select {
   margin-top: 10px;
   width: auto;
+}
+.botaoLaudo{
+  align-items: right;
+  width: 20%;
+  font-size: 15px;
+  background-color: rgb(255, 187, 0);
+  padding: 5px;
+}
+.botaoLaudo:hover {
+  font-size: 15px;
+  background-color: rgba(0, 0, 0, 0);
+  padding: 5px;
+  color: rgba(0, 0, 0, 0.568);
 }
 .botaoAprovacao {
   font-size: 14px;
