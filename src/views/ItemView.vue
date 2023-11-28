@@ -104,15 +104,18 @@
   const setor = ref('');
   const itemSetor = ref('');
 
-  //Variaveis do localstorage
-var TokenStorage = localStorage.getItem("Token");
-
+  //Variaveis utilizada para filtro e busca
+  var TokenStorage = localStorage.getItem("Token");
+  var IdStorage = localStorage.getItem("id")
+  var UserStorage = localStorage.getItem("cargo")
+  const usuario = ref()
   //conectando ao banco em nuvem
  // axios.defaults.baseURL = 'https://8080-greatpreten-backendgrea-t1i4c91qf2n.ws-us105.gitpod.io/'
   
  //buscando todos os setores do banco
   var servico = ref()
   const serv = ref()
+
   async function getServico() {
     serv.value =  (await axios.get(`servico/${servico.value}`, {
       headers:{
@@ -126,18 +129,38 @@ var TokenStorage = localStorage.getItem("Token");
   var erro = ref("")
   //depois de realizar alguma ação ele volta pra pagina inicial e atualiza com as informações do banco
   async function atualizar(){
-  try {
-    itens.value = (await axios.get('item', {
-      headers:{
-        'Authorization': TokenStorage
+    if(UserStorage == "ROLE_ADMIN"){
+      try {
+        itens.value = (await axios.get('item', {
+        headers:{
+          'Authorization': TokenStorage
+        }
+        })).data
       }
-    })).data
-  }
-  catch(ex) {
-     erro.value = (ex as Error).message
+      catch(ex) {
+        erro.value = (ex as Error).message
+      }
+    }else{
+      try {
+        usuario.value = (await axios.get(`usuario/${IdStorage}`, {
+        headers:{
+        'Authorization': TokenStorage
+        }
+        })).data
+
+        itens.value = (await axios.post('item/idSetor',{
+          id: usuario.value.setor.id
+        },{
+        headers:{
+          'Authorization': TokenStorage
+        }
+        })).data
+      }
+      catch(ex) {
+        erro.value = (ex as Error).message
+      }
     }
   }
-
   //Pegar os campos do front e salvar no banco de dados
   async function CadastrarItem() {
   console.log(serv.value)

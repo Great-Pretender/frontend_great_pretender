@@ -64,7 +64,7 @@
           <input type="text" placeholder="Buscar um Cliente" class="busca">
           <button class="btn-buscar"><i class="fas fa-search"></i></button>
           <!-- <button class="novo"></button> -->
-          <button class="novo" @click="openForm()">Novo Contrato</button>
+          <button v-if="UserStorage == 'ROLE_ADMIN' "  class="novo" @click="openForm()">Novo Contrato</button>
         </div>
         
   
@@ -365,6 +365,8 @@ const contratos = ref([])
 const clientes = ref([])
 const erro = ref()
 var TokenStorage = localStorage.getItem("Token");
+var IdStorage = localStorage.getItem("id")
+var UserStorage = localStorage.getItem("cargo")
 
 async function buscarContrato() {
 try {

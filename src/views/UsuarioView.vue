@@ -1,5 +1,5 @@
 <template id="template">
-
+  
   <div class="form-popup" id="myForm" >
     <div class="form-container">
       <h3 class="title">Novo usuário</h3>
@@ -48,7 +48,7 @@
           <input type="text" placeholder="Buscar um nome" class="busca">
           <button class="btn-buscar"><i class="fas fa-search"></i></button>
           <!-- <button class="novo"></button> -->
-          <button class="novo" @click="openForm()">Novo Usuário</button>
+          <button v-if="UserStorage == 'ROLE_ADMIN' " class="novo" @click="openForm()">Novo Usuário</button>
         </div>
         
   
@@ -323,6 +323,8 @@
   
   //Variaveis do localstorage
   var TokenStorage = localStorage.getItem("Token");
+  var IdStorage = localStorage.getItem("id")
+  var UserStorage = localStorage.getItem("cargo")
   
   async function buscarUsuario() {
     try {
@@ -372,6 +374,7 @@
   }
   
   async function cadastrarUsuario() {
+    if(UserStorage == "ROLE_ADMIN"){
       try {
         axios.post('usuario', {
   
@@ -391,6 +394,9 @@
       }catch(ex){
       erro.value = (ex as Error).message;
     }
+  }else{
+    alert("Você não tem permissão")
+  }
     atualizar(); 
   }
   
