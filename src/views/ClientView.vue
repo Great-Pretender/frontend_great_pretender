@@ -23,7 +23,7 @@
 
           <tbody>
             <tr v-for="cliente in clientes" :key="cliente.id">
-              <td>
+              <td v-if="UserStorage == 'ROLE_ADMIN' ">
                 <RouterLink :to="{ name: 'DetalhesCliente', params: { id: cliente.id } }" class="link">{{
                   cliente.nome_fantasia }}</RouterLink>
               </td>
@@ -111,7 +111,7 @@
           </form>
         </div>
 
-        <button id="addClient" @click="cadastrarCliente">Cadastrar</button>
+        <button v-if="UserStorage == 'ROLE_ADMIN'" id="addClient" @click="cadastrarCliente">Cadastrar</button>
       </article>
     </div>
 
@@ -142,8 +142,10 @@ const ClientUF = ref('');
 
 const clientes = ref('');
 
-//conectando ao banco em nuvem
+//Variaveis do localstorage
 var TokenStorage = localStorage.getItem("Token");
+var IdStorage = localStorage.getItem("id")
+var UserStorage = localStorage.getItem("cargo")
 
 //buscando todos os clientes do banco
 const cliente = ref()

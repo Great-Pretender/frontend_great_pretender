@@ -63,7 +63,7 @@
               </thead>
               <tbody>
                 <tr v-for="usuario in usuarios" :key="usuario.id">
-                  <td class="id"><RouterLink :to="{ name: 'DetalhesUsuario', params: {id :usuario.id} }" >{{ usuario.cpf }}</RouterLink></td>
+                  <td v-if="UserStorage == 'ROLE_ADMIN' " class="id"><RouterLink :to="{ name: 'DetalhesUsuario', params: {id :usuario.id} }" >{{ usuario.cpf }}</RouterLink></td>
                   <td>{{ usuario.nome }}</td>
                   <td>{{ usuario.email }}</td>
                   <td>
