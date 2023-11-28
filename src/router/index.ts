@@ -15,7 +15,7 @@ import DetalhesItemVue from '@/views/DetalhesItem.vue'
 import ordemServico from '@/views/OrdemDeServicoView.vue'
 import AtribuicaoOrdemDeServico from '@/views/AtribuicaoOrdemDeServico.vue'
 import LoginViewVue from '@/views/LoginView.vue'
-import TesteVue from '@/views/Teste.vue'
+import TesteContratoVue from '@/views/TesteContrato.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -110,9 +110,9 @@ const router = createRouter({
       component: LoginViewVue
     },
     {
-      path: '/teste',
-      name: 'Teste',
-      component: TesteVue
+      path: '/testeContrato',
+      name: 'TesteContrato',
+      component: TesteContratoVue
     }
   ]
 })

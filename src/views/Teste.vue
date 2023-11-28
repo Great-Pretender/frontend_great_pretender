@@ -1,6 +1,47 @@
 <template id="template">
+
+<div class="form-popup" id="myForm" >
+  <div class="form-container">
+    <h3 class="title">Novo usuário</h3>
+    <hr>
+
+      <div class="divs">
+            <label>Nome Completo: </label>
+          <input type="text" id="nome_user" v-model="nome" />
+          </div>
+          <div class="divs">
+            <label>CPF: </label>
+          <input type="text" id="cpf" v-model="cpf" maxlength="14" size="14"/>
+          </div>
+
+          <div class="divs">
+            <label>Email: </label>
+          <input type="text" id="email" v-model="email" />
+          </div>
+          <div class="divs">
+            <label>Senha: </label>
+          <input type="text" id="senha" v-model="senha" />
+          </div>
+          <div class="cargo">
+            <label>Cargo: </label>
+            <select class="cargo" v-model="cargo">
+                <option value="ROLE_TECNICO"> Técnico</option>
+                <option value="ROLE_ADMIN"> Administrador</option>
+                <option value="ROLE_SUPERVISOR"> Supervisor</option>
+              </select>
+          </div>
+          <div class="cliente">
+          <label>Setor: </label>
+              <select class="cliente" id="setor" v-model="setor" @change="getSetor()">
+                <option v-for="setor in setores" :key="setor.id" :value="setor.id">{{ setor.nome}}</option>
+              </select>
+          </div>
+          <button type="submit" class="btn cadastrar" @click="cadastrarUsuario()">Cadastrar</button>
+          <button type="button" class="btn cancel" @click="closeForm()">Cancelar</button>
+    </div>
+</div>
     <!-- Tab links -->
-    <div class="screen">
+    <div class="screen" id="screen">
       <hr>
       <div class="header">
         <h3 class="title">USUÁRIOS</h3>
@@ -11,43 +52,8 @@
       </div>
       
 
-<div class="form-popup" id="myForm" >
-<div class="form-container">
-  <h3 class="title">Novo usuário</h3>
-  <hr>
 
-    <div class="divs">
-          <label>Nome Completo: </label>
-        <input type="text" id="nome_user" v-model="nome" />
-        </div>
-        <div class="divs">
-          <label>CPF: </label>
-        <input type="text" id="cpf" v-model="cpf" maxlength="14" size="14"/>
-        </div>
-
-        <div class="divs">
-          <label>Email: </label>
-        <input type="text" id="email" v-model="email" />
-        </div>
-        <div class="cargo">
-          <label>Cargo: </label>
-          <select class="cargo" v-model="cargo">
-              <option value="ROLE_TECNICO"> Técnico</option>
-              <option value="ROLE_ADMIN"> Administrador</option>
-              <option value="ROLE_SUPERVISOR"> Supervisor</option>
-            </select>
-        </div>
-        <div class="cliente">
-        <label>Setor: </label>
-            <select class="cliente" id="setor" v-model="setor" @change="getSetor()">
-              <option v-for="setor in setores" :key="setor.id" :value="setor.id">{{ setor.nome}}</option>
-            </select>
-        </div>
-        <button type="submit" class="btn cadastrar">Cadastrar</button>
-        <button type="button" class="btn cancel" @click="closeForm()">Cancelar</button>
-  </div>
-</div>
-        <table class="tabela">
+        <table class="tabela" id="tabela">
             <thead class="cabecalho">
                 <th class="id">CPF</th>
                 <th class="extenso">NOME</th>
@@ -192,20 +198,21 @@ tr {
   bottom: 0;
   align-items: center;
   margin-bottom: 20px;
-  border: 3px solid #f1f1f1;
   z-index: 9;
 }
 
 /* Add styles to the form container */
 .form-container {
-  max-width: 1000px;
-  min-width: 1000px;
+  max-width: 500px;
+  min-width: 500px;
   padding: 10px;
   height: 35em;
-  
-
-
+  transition-duration: .5s;
+  margin-left: 75%;
   background-color: white;
+  /* border: 1px solid rgba(0, 0, 0, 0.192); */
+  border-radius: 10px;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
 
 }
 
@@ -217,6 +224,7 @@ tr {
   border: none;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.185);
 
 }
 select {
@@ -232,7 +240,9 @@ select {
 
 }
 
-/* Set a style for the submit/login button */
+/* Set a style for the submit/login button 
+
+*/
 .form-container .btn {
   background-color: #04AA6D;
   color: white;
@@ -264,7 +274,7 @@ select {
   
 }
 .cliente {
-  margin-bottom: 60px;
+  margin-bottom: 30px;
 }
 /* Add some hover effects to buttons */
 .form-container .btn:hover, .novo:hover {
@@ -386,10 +396,14 @@ onMounted(() => {
 
 function openForm() {
   document.getElementById("myForm").style.display = "block";
-  document.getElementById('template').style.filter = blur('5px')
+  document.getElementById("screen").style.filter = "blur(8px)";
 }
 
 function closeForm() {
   document.getElementById("myForm").style.display = "none";
+  document.getElementById("screen").style.filter = "blur(0px)";
+
 }
 </script>
+
+
