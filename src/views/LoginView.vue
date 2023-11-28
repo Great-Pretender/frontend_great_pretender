@@ -24,7 +24,9 @@ import { ref } from 'vue'
 
 const usuario = ref()
 const senha = ref()
+const identificacao = ref ()
 const loginRes = ref()
+var i = 0
 
 async function login() {
     
@@ -36,10 +38,24 @@ async function login() {
 
       })).data
       
+      
       localStorage.setItem("usuario", usuario.value)
       localStorage.setItem("senha", senha.value)
       localStorage.setItem("Token", loginRes.value.token)
-      
+
+      identificacao.value = (await axios.get('usuario', {
+        headers:{
+        'Authorization': loginRes.value.token
+      }
+      })).data
+
+    for (i = 0; i < identificacao.value.length; i++) {
+        if(identificacao.value[i].nome == usuario.value){
+            localStorage.setItem("id", identificacao.value[i].id)
+        }
+
+    } 
+
       window.location.href='/ordemServico'
       } catch (error) {
         console.error('Error fetching servico:', error)

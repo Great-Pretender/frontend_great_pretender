@@ -109,6 +109,8 @@
   const servicos = ref([]);
   var erro = ref()
   const setores = ref([])
+  const usuario = ref()
+  var i = 0
   //conectando ao banco em nuvem
 
   const formatMONETARIO = (el) => {
@@ -128,8 +130,7 @@
 
 //Variaveis do localstorage
 var TokenStorage = localStorage.getItem("Token");
-
-
+var IdStorage = localStorage.getItem("id")
 
   //buscando todos os setores do banco
   async function getSetor() {
@@ -138,17 +139,26 @@ var TokenStorage = localStorage.getItem("Token");
         'Authorization': TokenStorage
       }
     })).data
+    console.log(set.value)
   }
 
   //depois de realizar alguma ação ele volta pra pagina inicial e atualiza com as informações do banco
   async function atualizar(){
   try {
-    servicos.value = (await axios.get('servico', {
+
+    usuario.value = (await axios.get(`usuario/${IdStorage}`, {
       headers:{
-        'Authorization': TokenStorage
+      'Authorization': TokenStorage
       }
     })).data
 
+    servicos.value = (await axios.post('servico/idSetor',{
+      id: usuario.value.setor.id
+    }, {
+      headers:{
+      'Authorization': TokenStorage
+      }
+    })).data
   }
   catch(ex) {
      erro.value = (ex as Error).message
@@ -195,8 +205,7 @@ async function buscarSetor() {
 
 //para deixar carregado as funções antes da página carregar
 onMounted(() => {
-  
-  buscarSetores();
+  getSetor();
   atualizar();
   const custoInput = document.getElementById('InputServicoCost');
 formatMONETARIO(custoInput);
