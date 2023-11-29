@@ -15,7 +15,9 @@ import DetalhesItemVue from '@/views/DetalhesItem.vue'
 import ordemServico from '@/views/OrdemDeServicoView.vue'
 import AtribuicaoOrdemDeServico from '@/views/AtribuicaoOrdemDeServico.vue'
 import LoginViewVue from '@/views/LoginView.vue'
+import LaudoViewVue from '@/views/LaudoView.vue'
 import testeOS from '@/views/testeOS.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,7 +43,7 @@ const router = createRouter({
       component: DetalhesClientecoVue
     },
     {
-      path: '/',
+      path: '/home',
       name: 'Home',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -102,10 +104,15 @@ const router = createRouter({
       path: '/atribuicao/:id',
       name: 'AtribuicaoOrdemDeServico',
       component: AtribuicaoOrdemDeServico
+    },
+    {
+      path: '/laudo',
+      name: 'laudo',
+      component: LaudoViewVue
     }
     ,
     {
-      path: '/login',
+      path: '/',
       name: 'Login',
       component: LoginViewVue
     },

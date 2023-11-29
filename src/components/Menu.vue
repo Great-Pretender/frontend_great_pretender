@@ -41,7 +41,7 @@ console.log("teste")
     </label>
     <div class="sidebar">
       <header>Menu</header>
-      <RouterLink to="/">
+      <RouterLink to="/home">
         <i class="fas fa-file"></i>
         <span>Landing Page</span>
       </RouterLink>
@@ -56,6 +56,10 @@ console.log("teste")
       <RouterLink to="/client" v-if="UserStorage == 'ROLE_ADMIN'">
         <i class="fas fa-address-book"></i>
         <span>Clientes</span>
+      </RouterLink>
+      <RouterLink to="/laudo">
+        <i class="fas fa-table"></i>
+        <span>Laudos</span>
       </RouterLink>
       <RouterLink to="/Servico">
         <i class="fas fa-stream"></i>
