@@ -91,7 +91,7 @@
   </div>
 </template>
   
-  <script setup lang="ts">
+<script setup lang="ts">
 
   //Importações
   import { onMounted } from 'vue'
@@ -131,6 +131,7 @@
 //Variaveis do localstorage
 var TokenStorage = localStorage.getItem("Token");
 var IdStorage = localStorage.getItem("id")
+var UserStorage = localStorage.getItem("cargo")
 
   //buscando todos os setores do banco
   async function getSetor() {
@@ -142,29 +143,42 @@ var IdStorage = localStorage.getItem("id")
     console.log(set.value)
   }
 
-  //depois de realizar alguma ação ele volta pra pagina inicial e atualiza com as informações do banco
-  async function atualizar(){
-  try {
-
-    usuario.value = (await axios.get(`usuario/${IdStorage}`, {
+//Função responsável por buscar os serviços no banco para exibição
+async function exibir(){
+  //comparativo se o usuario for admin ele pode dar um get total do banco de dados
+  if(UserStorage == "ROLE_ADMIN"){
+    try {
+      servicos.value = (await axios.get("servico", {
       headers:{
       'Authorization': TokenStorage
       }
-    })).data
+      })).data
+    }
+    catch(ex) {
+      erro.value = (ex as Error).message
+    }
+    //caso não seja um admin somente os serviços do setor do usuário serão exibidosq
+  }else{
+    try {
+      usuario.value = (await axios.get(`usuario/${IdStorage}`, {
+      headers:{
+      'Authorization': TokenStorage
+      }
+      })).data
 
-    servicos.value = (await axios.post('servico/idSetor',{
+      servicos.value = (await axios.post('servico/idSetor',{
       id: usuario.value.setor.id
-    }, {
+      }, {
       headers:{
       'Authorization': TokenStorage
       }
-    })).data
-  }
-  catch(ex) {
-     erro.value = (ex as Error).message
+      })).data
+    }
+    catch(ex) {
+      erro.value = (ex as Error).message
     }
   }
-  
+}
   //Pegar os campos do front e salvar no banco de dados
   async function cadastrarServico() {
   try {
@@ -180,7 +194,7 @@ var IdStorage = localStorage.getItem("id")
         'Authorization': TokenStorage
       }
       })
-    atualizar();
+    exibir();
     window.location.href='/Servico'
   } catch(ex){
     erro.value = (ex as Error).message;
@@ -206,7 +220,7 @@ async function buscarSetor() {
 //para deixar carregado as funções antes da página carregar
 onMounted(() => {
   getSetor();
-  atualizar();
+  exibir();
   const custoInput = document.getElementById('InputServicoCost');
 formatMONETARIO(custoInput);
 

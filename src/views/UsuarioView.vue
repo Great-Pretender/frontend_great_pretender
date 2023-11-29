@@ -1,5 +1,5 @@
 <template id="template">
-
+  
   <div class="form-popup" id="myForm" >
     <div class="form-container">
       <h3 class="title">Novo usuário</h3>
@@ -48,7 +48,7 @@
           <input type="text" placeholder="Buscar um nome" class="busca">
           <button class="btn-buscar"><i class="fas fa-search"></i></button>
           <!-- <button class="novo"></button> -->
-          <button class="novo" @click="openForm()">Novo Usuário</button>
+          <button v-if="UserStorage == 'ROLE_ADMIN' " class="novo" @click="openForm()">Novo Usuário</button>
         </div>
         
   
@@ -63,7 +63,7 @@
               </thead>
               <tbody>
                 <tr v-for="usuario in usuarios" :key="usuario.id">
-                  <td class="id"><RouterLink :to="{ name: 'DetalhesUsuario', params: {id :usuario.id} }" >{{ usuario.cpf }}</RouterLink></td>
+                  <td v-if="UserStorage == 'ROLE_ADMIN' " class="id"><RouterLink :to="{ name: 'DetalhesUsuario', params: {id :usuario.id} }" >{{ usuario.cpf }}</RouterLink></td>
                   <td>{{ usuario.nome }}</td>
                   <td>{{ usuario.email }}</td>
                   <td>
@@ -324,6 +324,8 @@
   
   //Variaveis do localstorage
   var TokenStorage = localStorage.getItem("Token");
+  var IdStorage = localStorage.getItem("id")
+  var UserStorage = localStorage.getItem("cargo")
   
   async function buscarUsuario() {
     try {
@@ -373,6 +375,7 @@
   }
   
   async function cadastrarUsuario() {
+    if(UserStorage == "ROLE_ADMIN"){
       try {
         axios.post('usuario', {
   
@@ -392,6 +395,9 @@
       }catch(ex){
       erro.value = (ex as Error).message;
     }
+  }else{
+    alert("Você não tem permissão")
+  }
     atualizar(); 
   }
   
