@@ -64,7 +64,7 @@
           <input type="text" placeholder="Buscar um Cliente" class="busca">
           <button class="btn-buscar"><i class="fas fa-search"></i></button>
           <!-- <button class="novo"></button> -->
-          <button v-if="UserStorage == 'ROLE_ADMIN' "  class="novo" @click="openForm()">Novo Contrato</button>
+          <button class="novo" @click="openForm()">Novo Contrato</button>
         </div>
         
   
@@ -241,9 +241,7 @@
       border-radius: 9px;
   }
   
-  table{
-    margin-left: 5%;
-  }
+  
   tr:hover{
     background-color: rgb(255, 255, 255);
     transition-duration: .18s;
@@ -365,8 +363,6 @@ const contratos = ref([])
 const clientes = ref([])
 const erro = ref()
 var TokenStorage = localStorage.getItem("Token");
-var IdStorage = localStorage.getItem("id")
-var UserStorage = localStorage.getItem("cargo")
 
 async function buscarContrato() {
 try {

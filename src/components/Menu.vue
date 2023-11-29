@@ -27,7 +27,7 @@ console.log("teste")
     </label>
     <div class="sidebar">
       <header>Menu</header>
-      <RouterLink to="/">
+      <RouterLink to="/home">
         <i class="fas fa-file"></i>
         <span>Landing Page</span>
       </RouterLink>
@@ -112,8 +112,10 @@ console.log("teste")
 }
 a.active,a:hover{
   border-left: 5px solid var(--accent-color);
-  color: #fff;
-   background: linear-gradient(to left, var(--accent-color), var(--gradient-color));
+  color: #000000;
+   /* background: linear-gradient(to left, var(--accent-color), var(--gradient-color)); */
+   font-weight: bold;
+   /* background-color: #ffc40059; */
 }
 .sidebar a i{
   font-size: 15px;
