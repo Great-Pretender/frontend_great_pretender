@@ -41,7 +41,7 @@ const router = createRouter({
       component: DetalhesClientecoVue
     },
     {
-      path: '/',
+      path: '/home',
       name: 'Home',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -105,7 +105,7 @@ const router = createRouter({
     }
     ,
     {
-      path: '/login',
+      path: '/',
       name: 'Login',
       component: LoginViewVue
     },

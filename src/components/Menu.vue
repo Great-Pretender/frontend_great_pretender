@@ -27,7 +27,7 @@ console.log("teste")
     </label>
     <div class="sidebar">
       <header>Menu</header>
-      <RouterLink to="/">
+      <RouterLink to="/home">
         <i class="fas fa-file"></i>
         <span>Landing Page</span>
       </RouterLink>
