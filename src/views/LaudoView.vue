@@ -131,11 +131,13 @@
     
 </template>
 
+
 <script setup>
 import { onMounted } from 'vue'
 import axios from 'axios'
 import { ref } from 'vue'
 import '@fortawesome/fontawesome-free/css/all.css'
+import html2pdf from "html2pdf.js";
 
 const ordens = ref([])
 const cliente = ref()
@@ -144,6 +146,10 @@ const descricao = ref('')
 var statusOrdem = ref('')
 var statusAprovacao = ref('')
 const cli = ref()
+
+function exportToPDF(){
+			html2pdf(document.getElementById('tabelaOrdens'));
+		}
 
 async function getCliente() {
   console.log(cliente.value)
@@ -354,6 +360,7 @@ function gerarLaudo(){
     ordensDoCliente.push(element);
     
   });
+  exportToPDF();
   alert("Cliente = "+clienteNome+" Ordens do Cliente: "+ ordensDoCliente);
 }
 
