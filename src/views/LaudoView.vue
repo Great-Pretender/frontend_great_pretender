@@ -11,14 +11,10 @@
                     </option>
                 </select>
             </label>
-
-            <button id="selectCliente" @click="buscarOrdensPorCliente()">Selecionar</button>
-
-          <p v-if="erro">{{ erro }}</p>
         </div>
     
         <div id="tabelaOrdens">
-          <h1>Ordens Cadastradas</h1>
+          <h1>Ordens Aprovadas</h1>
           <table>
             <thead>
               <th>ID</th>
@@ -28,8 +24,6 @@
               <th>DESCRICAO</th>
               <th>DATA INICIO</th>
               <th>DATA FIM</th>
-              <th>STATUS ORDEM</th>
-              <th>STATUS APROVACAO</th>
             </thead>
 
             <tbody>
@@ -46,84 +40,18 @@
                 <td>{{ ordem.cliente.nome_fantasia }}</td>
                 <td>
                   {{ ordem.descricao }}
-                  <span
-                    ><button class="botao" id="mostraText" @click="showDescOrdem(ordem.id)">
-                      Editar
-                    </button></span
-                  >
-                  <div :id="'desc' + ordem.id" class="ordemDescID" :hidden="true">
-                    <textarea
-                      class="texta"
-                      placeholder="Digite sua mensagem"
-                      id="editDescricao"
-                      v-model="descricao"
-                    ></textarea>
-                    <button class="botao" id="editDesc" @click="attDescOrdem(ordem)">Salvar</button>
-                  </div>
                 </td>
                 <td>{{ ordem.data_inicio }}</td>
                 <td>{{ ordem.data_fim }}</td>
-                <td>
-                  <span>
-                    <button
-                      id="mostraSelect"
-                      class="botaoAprovacao"
-                      @click="showSelectOrdem(ordem.id)"
-                    >
-                      {{ ordem.status_ordem }}
-                    </button>
-                  </span>
-                  <div :id="'sto' + ordem.id" class="ordemStOID" :hidden="true">
-                    <select class="select" v-model="statusOrdem">
-                      <option id="" :value="ordem.status_ordem">
-                        {{ ordem.status_ordem }}
-                      </option>
-                      <option
-                        v-for="option in statusOptionsOrdem(ordem.status_ordem)"
-                        :key="option"
-                        :value="option"
-                      >
-                        {{ option }}
-                      </option>
-                    </select>
-                    <button class="botao" @click="attStatusOrdem(ordem)">Salvar</button>
-                  </div>
-                </td>
-                <td>
-                  <span>
-                    <button
-                      class="botaoAprovacao"
-                      id="mostraSelect"
-                      @click="showSelectAprovacao(ordem.id)"
-                    >
-                      {{ ordem.status_aprovacao }}
-                    </button>
-                  </span>
-                  <div :id="'sta' + ordem.id" class="ordemStAID" :hidden="true">
-                    <select v-model="statusAprovacao" class="select">
-                      <option :value="ordem.status_aprovacao">
-                        {{ ordem.status_aprovacao }}
-                      </option>
-                      <option
-                        v-for="option in statusOptionsAprovacao(ordem.status_aprovacao)"
-                        :key="option"
-                        :value="option"
-                      >
-                        {{ option }}
-                      </option>
-                    </select>
-                    <button class="botao" @click="attStatusAprovacao(ordem)">Salvar</button>
-                  </div>
-                </td>
-                <button class="botao" id="btnDeletar" @click="deletar(ordem)">
-                  <i class="fas fa-trash"></i>
-                </button>
               </tr>
             </tbody>
           </table>
         </div>
-        <div  class="botaoLaudo"  id="gerarLaudo"  :disabled="true">
-      <button @click="gerarLaudo()">GERAR LAUDO</button>
+    <div    id="gerarLaudo"  :disabled="true" v-if="ordens.length <= 0">
+          <button class="botao" id="selectCliente" @click="buscarOrdensPorCliente()">Selecionar</button>
+    </div>
+    <div    id="gerarLaudo"  :disabled="true" v-if="ordens.length > 0">
+      <button class="botao" @click="gerarLaudo()">GERAR LAUDO</button>
     </div>
       
   </div>
@@ -143,13 +71,22 @@ const ordens = ref([])
 const cliente = ref()
 const clientes = ref([])
 const descricao = ref('')
-var statusOrdem = ref('')
-var statusAprovacao = ref('')
 const cli = ref()
 
 function exportToPDF(){
 			html2pdf(document.getElementById('tabelaOrdens'));
 		}
+
+function gerarLaudo(){
+  exportToPDF();
+  let clienteNome = cliente.value.nome_fantasia;
+  let ordensDoCliente = [];
+  ordens.value.forEach(element => {
+    ordensDoCliente.push(element);
+    
+  });
+  alert("Cliente = "+clienteNome+" Ordens do Cliente: "+ ordensDoCliente);
+}
 
 async function getCliente() {
   console.log(cliente.value)
@@ -200,150 +137,12 @@ async function buscarClientes() {
   }
 }
 
-async function attStatusOrdem(ordem) {
-  try {
-    const response = await axios.put(
-      `ordemdeservico/${ordem.id}`,
-      {
-        id: ordem.id,
-        cliente: ordem.cliente,
-        setor: ordem.setor,
-        usuario: ordem.usuario,
-        descricao: ordem.descricao,
-        data_inicio: ordem.data_inicio,
-        data_fim: ordem.data_fim,
-        status_ordem: statusOrdem.value,
-        status_aprovacao: ordem.status_aprovacao
-      },
-      {
-        headers: {
-          Authorization: TokenStorage
-        }
-      }
-    )
 
-    let obj = {}
-    obj.value = response.data
-    buscarOrdens()
-    hideSelectOrdem(ordem.id)
-    alert('Sucesso!' + obj)
-  } catch (error) {
-    alert('Erro!:')
-    console.error('Erro!:', error)
-  }
-}
-
-async function attStatusAprovacao(ordem) {
-  try {
-    const response = await axios.put(
-      `ordemdeservico/${ordem.id}`,
-      {
-        id: ordem.id,
-        cliente: ordem.cliente,
-        setor: ordem.setor,
-        usuario: ordem.usuario,
-        descricao: ordem.descricao,
-        data_inicio: ordem.data_inicio,
-        data_fim: ordem.data_fim,
-        status_ordem: ordem.status_ordem,
-        status_aprovacao: statusAprovacao.value
-      },
-      {
-        headers: {
-          Authorization: TokenStorage
-        }
-      }
-    )
-    let obj = {}
-    obj.value = response.data
-    buscarOrdens()
-    hideSelectAprovacao(ordem.id)
-    alert('Sucesso!' + obj)
-  } catch (error) {
-    alert('Erro!:')
-    console.error('Erro!:', error)
-  }
-}
-
-async function attDescOrdem(ordem) {
-  try {
-    const response = await axios.put(
-      `ordemdeservico/${ordem.id}`,
-      {
-        id: ordem.id,
-        cliente: ordem.cliente,
-        setor: ordem.setor,
-        usuario: ordem.usuario,
-        descricao: descricao.value,
-        data_inicio: ordem.data_inicio,
-        data_fim: ordem.data_fim,
-        status_ordem: ordem.status_ordem,
-        status_aprovacao: ordem.status_aprovacao
-      },
-      {
-        headers: {
-          Authorization: TokenStorage
-        }
-      }
-    )
-    let obj = {}
-    obj.value = response.data
-    buscarOrdens()
-    hideDescOrdem(ordem.id)
-    alert('Sucesso!' + obj)
-  } catch (error) {
-    alert('Erro!:')
-    console.error('Erro!:', error)
-  }
-}
-
-async function deletar(ordem) {
-  if (confirm('Deseja realmente deletar essa ordem?')) {
-    // Save it!
-    await axios.delete(`ordemdeservico/${ordem.id}`, {
-      headers: {
-        Authorization: TokenStorage
-      }
-    })
-    buscarOrdens()
-  } else {
-    console.log('nada')
-  }
-}
-
-function statusOptionsAprovacao(currentStatus) {
-  const options = ['Pendente', 'Aprovado', 'Desaprovado']
-  const index = options.indexOf(currentStatus)
-  if (index !== -1) {
-    options.splice(index, 1)
-  }
-  return options
-}
-
-function statusOptionsOrdem(currentStatus) {
-  const options = ['Pendente', 'Em andamento', 'Concluido']
-  const index = options.indexOf(currentStatus)
-  if (index !== -1) {
-    options.splice(index, 1)
-  }
-  return options
-}
-
-function showSelectOrdem(ID) {
-  document.getElementById('sto' + ID).hidden = false
-}
-
-function showDescOrdem(ID) {
-  document.getElementById('desc' + ID).hidden = false
-}
 
 function hideDescOrdem(ID) {
   document.getElementById('desc' + ID).hidden = true
 }
 
-function showSelectAprovacao(ID) {
-  document.getElementById('sta' + ID).hidden = false
-}
 
 function hideSelectOrdem(ID) {
   document.getElementById('sto' + ID).hidden = true
@@ -353,16 +152,6 @@ function hideSelectAprovacao(ID) {
   document.getElementById('sta' + ID).hidden = true
 }
 
-function gerarLaudo(){
-  let clienteNome = cliente.value.nome_fantasia;
-  let ordensDoCliente = [];
-  ordens.value.forEach(element => {
-    ordensDoCliente.push(element);
-    
-  });
-  exportToPDF();
-  alert("Cliente = "+clienteNome+" Ordens do Cliente: "+ ordensDoCliente);
-}
 
 onMounted(() => {
     buscarClientes();
