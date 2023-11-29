@@ -1,71 +1,65 @@
 <template>
   <div id="tabBox">
-
-        <div id="clienteOrdem">
-            <h3>Selecione Ordens por Cliente:</h3>
-            <br>
-            <label for="">CLIENTE:
-                <select v-model="cliente">
-                    <option  v-for="cliente in clientes" :key="cliente.id" :value="cliente">
-                        {{ cliente.nome_fantasia }}
-                    </option>
-                </select>
-            </label>
-        </div>
-    
-        <div id="tabelaOrdens">
-          <h1>Ordens Aprovadas</h1>
-          <table>
-            <thead>
-              <th>ID</th>
-              <th>SETOR</th>
-              <th>USUARIO</th>
-              <th>CLIENTE</th>
-              <th>DESCRICAO</th>
-              <th>DATA INICIO</th>
-              <th>DATA FIM</th>
-            </thead>
-
-            <tbody>
-              <tr v-for="ordem in ordens" :key="ordem.id">
-                <td>
-                  <RouterLink
-                    :to="{ name: 'AtribuicaoOrdemDeServico', params: { id: ordem.id } }"
-                    class="link"
-                    >{{ ordem.id }}</RouterLink
-                  >
-                </td>
-                <td>{{ ordem.setor.nome }}</td>
-                <td>{{ ordem.usuario.nome }}</td>
-                <td>{{ ordem.cliente.nome_fantasia }}</td>
-                <td>
-                  {{ ordem.descricao }}
-                </td>
-                <td>{{ ordem.data_inicio }}</td>
-                <td>{{ ordem.data_fim }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-    <div    id="gerarLaudo"  :disabled="true" v-if="ordens.length <= 0">
-          <button class="botao" id="selectCliente" @click="buscarOrdensPorCliente()">Selecionar</button>
+    <div id="clienteOrdem">
+      <h3>Selecione Ordens por Cliente:</h3>
+      <br />
+      <label for=""
+        >CLIENTE:
+        <select v-model="cliente">
+          <option v-for="cliente in clientes" :key="cliente.id" :value="cliente">
+            {{ cliente.nome_fantasia }}
+          </option>
+        </select>
+      </label>
     </div>
-    <div    id="gerarLaudo"  :disabled="true" v-if="ordens.length > 0">
+
+    <div id="tabelaOrdens">
+      <h1>Ordens Aprovadas</h1>
+      <table>
+        <thead>
+          <th>ID</th>
+          <th>SETOR</th>
+          <th>CLIENTE</th>
+          <th>DESCRICAO</th>
+          <th>DATA INICIO</th>
+          <th>DATA FIM</th>
+        </thead>
+
+        <tbody>
+          <tr v-for="ordem in ordens" :key="ordem.id">
+            <td>
+              <RouterLink
+                :to="{ name: 'AtribuicaoOrdemDeServico', params: { id: ordem.id } }"
+                class="link"
+                >{{ ordem.id }}</RouterLink
+              >
+            </td>
+            <td>{{ ordem.setor.nome }}</td>
+            <td>{{ ordem.cliente.nome_fantasia }}</td>
+            <td>
+              {{ ordem.descricao }}
+            </td>
+            <td>{{ ordem.data_inicio }}</td>
+            <td>{{ ordem.data_fim }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="gerarLaudo" :disabled="true" v-if="ordens.length <= 0">
+      <button class="botao" id="selectCliente" @click="buscarOrdensPorCliente()">Selecionar</button>
+    </div>
+    <div id="gerarLaudo" :disabled="true" v-if="ordens.length > 0">
       <button class="botao" @click="gerarLaudo()">GERAR LAUDO</button>
     </div>
-      
   </div>
-
-    
 </template>
-
 
 <script setup>
 import { onMounted } from 'vue'
 import axios from 'axios'
 import { ref } from 'vue'
 import '@fortawesome/fontawesome-free/css/all.css'
-import html2pdf from "html2pdf.js";
+import html2pdf from 'html2pdf.js'
 
 const ordens = ref([])
 const cliente = ref()
@@ -73,19 +67,18 @@ const clientes = ref([])
 const descricao = ref('')
 const cli = ref()
 
-function exportToPDF(){
-			html2pdf(document.getElementById('tabelaOrdens'));
-		}
+function exportToPDF() {
+  html2pdf(document.getElementById('tabelaOrdens'))
+}
 
-function gerarLaudo(){
-  exportToPDF();
-  let clienteNome = cliente.value.nome_fantasia;
-  let ordensDoCliente = [];
-  ordens.value.forEach(element => {
-    ordensDoCliente.push(element);
-    
-  });
-  alert("Cliente = "+clienteNome+" Ordens do Cliente: "+ ordensDoCliente);
+function gerarLaudo() {
+  exportToPDF()
+  let clienteNome = cliente.value.nome_fantasia
+  let ordensDoCliente = []
+  ordens.value.forEach((element) => {
+    ordensDoCliente.push(element)
+  })
+  alert('Cliente = ' + clienteNome + ' Ordens do Cliente: ' + ordensDoCliente)
 }
 
 async function getCliente() {
@@ -112,11 +105,13 @@ async function buscarOrdensPorCliente() {
       'ordemdeservico/idCliente',
       {
         id: cliente.value.id
-      },{
-      headers: {
-        'Authorization': TokenStorage
+      },
+      {
+        headers: {
+          Authorization: TokenStorage
+        }
       }
-      })
+    )
     ordens.value = response.data
   } catch (error) {
     console.error('Erro! :' + error)
@@ -137,12 +132,9 @@ async function buscarClientes() {
   }
 }
 
-
-
 function hideDescOrdem(ID) {
   document.getElementById('desc' + ID).hidden = true
 }
-
 
 function hideSelectOrdem(ID) {
   document.getElementById('sto' + ID).hidden = true
@@ -152,9 +144,8 @@ function hideSelectAprovacao(ID) {
   document.getElementById('sta' + ID).hidden = true
 }
 
-
 onMounted(() => {
-    buscarClientes();
+  buscarClientes()
 })
 </script>
 
@@ -177,7 +168,7 @@ onMounted(() => {
   margin-top: 10px;
   width: auto;
 }
-.botaoLaudo{
+.botaoLaudo {
   align-items: right;
   width: 20%;
   font-size: 15px;
