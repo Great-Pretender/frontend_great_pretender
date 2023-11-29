@@ -100,7 +100,8 @@ let statusAndamento = ref()
 
 const usu = ref()
 const serv = ref()
-
+  //Variaveis do localstorage
+  var TokenStorage = localStorage.getItem("Token");
 async function getValoresOrdem() {
   try {
     ordem.value = (await axios.get(`ordemdeservico/${id}`, {
@@ -130,6 +131,11 @@ async function getAtribuicoesPorOrdem() {
     const response = await axios.post('atribuicao/idOrdem', {
       
       id: ordem.value.id
+    },
+    {
+      headers:{
+        'Authorization': TokenStorage
+      }
     })
     atribuicoes.value = response.data
   } catch (error) {
@@ -141,6 +147,10 @@ async function getServicoPorSetor() {
   try {
     const response = await axios.post('servico/idSetor', {
       id: ordem.value.setor.id
+    }, {
+      headers:{
+        'Authorization': TokenStorage
+      }
     })
 
     servicos.value = response.data
@@ -153,7 +163,12 @@ async function getUsuarioPorSetor() {
   try {
     const response = await axios.post('usuario/idSetor', {
       id: ordem.value.setor.id
-    })
+    }, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    }
+    )
 
     usuarios.value = response.data
   } catch (error) {
@@ -163,7 +178,11 @@ async function getUsuarioPorSetor() {
 
 async function getServico() {
   try {
-    serv.value = (await axios.get(`servico/${servico.value}`)).data
+    serv.value = (await axios.get(`servico/${servico.value}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
   } catch (error) {
     console.error('Erro! :' + error)
   }
@@ -171,7 +190,11 @@ async function getServico() {
 
 async function getUsuario() {
   try {
-    usu.value = (await axios.get(`usuario/${usuario.value}`)).data
+    usu.value = (await axios.get(`usuario/${usuario.value}`, {
+      headers:{
+        'Authorization': TokenStorage
+      }
+    })).data
   } catch (error) {
     console.error('Erro! :' + error)
   }
@@ -185,6 +208,10 @@ async function atribuirServico() {
       comentario: comentario.value,
       ordem: ordem.value,
       status_andamento: 'Pendente'
+    }, {
+      headers:{
+        'Authorization': TokenStorage
+      }
     })
     let obj = {}
     obj.value = response.data
@@ -215,6 +242,10 @@ async function attStatus(atribuicao) {
       comentario: atribuicao.comentario,
       ordem: ordem.value,
       status_andamento: statusAndamento.value
+    }, {
+      headers:{
+        'Authorization': TokenStorage
+      }
     })
     let obj = {}
     obj.value = response.data

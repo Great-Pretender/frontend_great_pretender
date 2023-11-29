@@ -1,38 +1,133 @@
-<template>
-  <div id="tabBox">
-    <div class="tabWrap">
-      <input id="tab-01" name="tab" type="radio" checked />
-      <label class="tab label-01" for="tab-01"><span>Ordens</span></label>
+<template id="template">
+    <div class="form-popup" id="myForm" >
+      <div class="form-container">
+        <h3 class="title">Criar OS</h3>
+        <hr>
+    
+          <div class="divs">
+                <label>Setor: </label>
+                <select class="cliente" id="setor" v-model="setor" @change="getSetor()">
+                  <option v-for="setor in setores" :key="setor.id" :value="setor.id">
+                    {{ setor.nome }}
+                  </option>
+                </select>
+                <label for="" class="divs u">Usuário: </label>
+              <select class="cliente" id="usuario_id" v-model="usuario" @change="getUsuario()">
+              <option v-for="usuario in usuarios" :key="usuario.id" :value="usuario.id">
+                {{ usuario.nome }}
+              </option>
+            </select>
+            </div>
+            <div class="divs">
+              <label for="">Cliente: </label>
+              <select class="cliente" id="cliente_id" v-model="cliente" @change="getCliente()">
+              <option v-for="cliente in clientes" :key="cliente.id" :value="cliente.id">
+                {{ cliente.nome_fantasia }}
+              </option>
+              </select>
+            </div>
 
-      <article class="tabContent">
-        <div id="tabelaOrdens">
-          <h1>Ordens Cadastradas</h1>
-          <table>
-            <thead>
-              <th>ID</th>
-              <th>SETOR</th>
-              <th>USUARIO</th>
-              <th>CLIENTE</th>
-              <th>DESCRICAO</th>
-              <th>DATA INICIO</th>
-              <th>DATA FIM</th>
-              <th>STATUS ORDEM</th>
-              <th>STATUS APROVACAO</th>
-            </thead>
-
-            <tbody>
-              <tr v-for="ordem in ordens" :key="ordem.id">
-                <td>
-                  <RouterLink
+            <div class="divs">
+              <label for="">Descrição: </label>
+              <textarea
+              placeholder="Digite sua mensagem"
+              id="descricao"
+              v-model="descricao" class="descricao"
+            ></textarea>
+            </div>
+            <div class="datas">
+            <label for="ticketNum">Data de início:</label>
+            <input type="date" class="data1" id="dataInicio" v-model="dataInicio" />
+          </div>
+          <div class="datas">
+            <label class="">Data Fim:</label>
+            <input type="date" class="data2" id="dataFim" v-model="dataFim" />
+          </div>
+              <button type="submit" class="btn cadastrar" @click="cadastrarOrdem()">Cadastrar</button>
+              <button type="button" class="btn cancel" @click="closeForm()">Cancelar</button>
+        </div>
+    </div>
+        <!-- Tab links -->
+        <div class="screen" id="screen">
+          <hr>
+          <div class="header">
+            <h3 class="title">ORDEM DE SERVIÇO</h3>
+            <input type="text" placeholder="Buscar um Cliente" class="busca">
+            <button class="btn-buscar"><i class="fas fa-search"></i></button>
+            <!-- <button class="novo"></button> -->
+            <button class="novo" @click="openForm()">Criar OS</button>
+          </div>
+          
+    
+    
+            <table class="tabela" id="tabela">
+                <thead class="cabecalho">
+                    <th class="id">ID</th>
+                    <th >SETOR</th>
+                    <th class="extenso">USUARIO</th>
+                    <th>CLIENTE</th>
+                    <th>DATA DE INÍCIO</th>
+                    <th>DATA DE FINALIZAÇÃO</th>
+                    <th>STATUS</th>
+                    <th>APROVAÇÃO</th>
+                    <th>DESCRIÇÃO</th>
+                </thead>
+                <tbody>
+                    <tr v-for="ordem in ordens" :key="ordem.id">
+                        <td>
+                          <RouterLink
                     :to="{ name: 'AtribuicaoOrdemDeServico', params: { id: ordem.id } }"
                     class="link"
                     >{{ ordem.id }}</RouterLink
                   >
-                </td>
-                <td>{{ ordem.setor.nome }}</td>
-                <td>{{ ordem.usuario.nome }}</td>
-                <td>{{ ordem.cliente.nome_fantasia }}</td>
-                <td>{{ ordem.descricao }} <span><button class="botao" id="mostraText" @click="showDescOrdem(ordem.id)">Editar</button></span>
+                        </td>
+                        <td>{{ ordem.setor.nome }}</td>
+                        <td>{{ ordem.usuario.nome }}</td>
+                        <td>{{ ordem.cliente.nome_fantasia }}</td>
+                        <td>{{ String(ordem.data_inicio).split("-").reverse().join("/")}}</td>
+                        <td>{{ String(ordem.data_fim).split("-").reverse().join("/")}}</td>
+                        
+                        <td>
+                            <span>
+                                <button id="mostraSelect" class="botaoAprovacao" @click="showSelectOrdem(ordem.id)">{{ ordem.status_ordem }}</button>
+                            </span>
+                            <div :id="'sto'+ordem.id" class="ordemStOID" :hidden="true">
+                                <select class="select" v-model="statusOrdem">
+                                <option id="" :value="ordem.status_ordem">
+                                    {{ ordem.status_ordem }}
+                                </option>
+                                <option
+                                    v-for="option in statusOptionsOrdem(ordem.status_ordem)"
+                                    :key="option"
+                                    :value="option"
+                                >
+                                    {{ option }}
+                                </option>
+                                </select>
+                                
+                                <button class="botao" @click="attStatusOrdem(ordem)">Salvar</button>
+                            </div>
+                        </td>
+                        <td><span>
+                            <button class="botaoAprovacao" id="mostraSelect" @click="showSelectAprovacao(ordem.id)">{{ ordem.status_aprovacao }}</button>
+                        </span>
+                        <div :id="'sta'+ordem.id" class="ordemStAID" :hidden="true">
+                            <select v-model="statusAprovacao" class="select">
+                            <option :value="ordem.status_aprovacao">
+                                {{ ordem.status_aprovacao }}
+                            </option>
+                            <option
+                                v-for="option in statusOptionsAprovacao(ordem.status_aprovacao)"
+                                :key="option"
+                                :value="option"
+                            >
+                                {{ option }}
+                                </option>
+                                </select>
+                                <button class="botao" @click="attStatusAprovacao(ordem)">Salvar</button>
+                            </div>
+                        </td>
+                        <td><span><button class="botao desc" id="mostraText" @click="showDescOrdem(ordem.id)"><i class="fas fa-pencil"></i></button></span> {{ ordem.descricao }} 
                   <div :id="'desc'+ordem.id" class="ordemDescID" :hidden="true">
                     <textarea class="texta"
                         placeholder="Digite sua mensagem"
@@ -42,114 +137,305 @@
                       <button class="botao" id="editDesc" @click="attDescOrdem(ordem)">Salvar</button>
                   </div>
                 </td>
-                <td>{{ ordem.data_inicio }}</td>
-                <td>{{ ordem.data_fim }}</td>
-                <td>
-                  <span>
-                    <button id="mostraSelect" class="botaoAprovacao" @click="showSelectOrdem(ordem.id)">{{ ordem.status_ordem }}</button>
-                  </span>
-                  <div :id="'sto'+ordem.id" class="ordemStOID" :hidden="true">
-                    <select class="select" v-model="statusOrdem">
-                      <option id="" :value="ordem.status_ordem">
-                        {{ ordem.status_ordem }}
-                      </option>
-                      <option
-                        v-for="option in statusOptionsOrdem(ordem.status_ordem)"
-                        :key="option"
-                        :value="option"
-                      >
-                        {{ option }}
-                      </option>
-                    </select>
-                    <button class="botao" @click="attStatusOrdem(ordem)">Salvar</button>
-                  </div>
-                </td>
-                <td><span>
-                    <button class="botaoAprovacao" id="mostraSelect" @click="showSelectAprovacao(ordem.id)">{{ ordem.status_aprovacao }}</button>
-                  </span>
-                  <div :id="'sta'+ordem.id" class="ordemStAID" :hidden="true">
-                    <select v-model="statusAprovacao" class="select">
-                      <option :value="ordem.status_aprovacao">
-                        {{ ordem.status_aprovacao }}
-                      </option>
-                      <option
-                        v-for="option in statusOptionsAprovacao(ordem.status_aprovacao)"
-                        :key="option"
-                        :value="option"
-                      >
-                        {{ option }}
-                      </option>
-                    </select>
-                    <button class="botao" @click="attStatusAprovacao(ordem)">Salvar</button>
-                  </div></td>
-                  <button class="botao" id="btnDeletar" @click="deletar(ordem)"><i class="fas fa-trash"></i></button>
-              </tr>
-            </tbody>
-          </table>
+                        <button class="botao" id="btnDeletar" @click="deletar(ordem)"><i class="fas fa-trash"></i></button>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-      </article>
-    </div>
-    <div class="tabWrap">
-      <input id="tab-02" name="tab" type="radio" />
-      <label class="tab label-02" for="tab-02"><span>Cadastro</span></label>
-      <!-- tabContent 02 -->
-      <article class="tabContent">
-        <h3>Preencha as informações:</h3>
-        <div id="ordemServico">
-          <div class="cliente">
-            <label>Setor: </label>
-            <select class="cliente" id="setor" v-model="setor" @change="getSetor()">
-              <option v-for="setor in setores" :key="setor.id" :value="setor.id">
-                {{ setor.nome }}
-              </option>
-            </select>
-          </div>
+    </template>
+    <style>
+    /* INPUTS */
+.divs.u {
+  margin-left: 150px !important;
+}
+.fas.fa-trash {
+  font-size: 10px;
+}
 
-          <div class="cliente">
-            <label>Cliente: </label>
-            <select class="cliente" id="cliente_id" v-model="cliente" @change="getCliente()">
-              <option v-for="cliente in clientes" :key="cliente.id" :value="cliente.id">
-                {{ cliente.nome_fantasia }}
-              </option>
-            </select>
-          </div>
-
-          <div class="cliente">
-            <label>Usuario: </label>
-            <select class="cliente" id="usuario_id" v-model="usuario" @change="getUsuario()">
-              <option v-for="usuario in usuarios" :key="usuario.id" :value="usuario.id">
-                {{ usuario.nome }}
-              </option>
-            </select>
-          </div>
-
-          <div class="cliente">
-            <label>Descrição:</label>
-            <br />
-            <textarea
-              placeholder="Digite sua mensagem"
-              id="descricao"
-              v-model="descricao"
-            ></textarea>
-          </div>
-          <div class="datas">
-            <label for="ticketNum">Data de início:</label>
-            <input type="date" class="data1" id="dataInicio" v-model="dataInicio" />
-          </div>
-          <div class="datas">
-            <label class="">Data Fim:</label>
-            <input type="date" class="data2" id="dataFim" v-model="dataFim" />
-          </div>
-          <div>
-            <button @click="cadastrarOrdem()" class="cadastrarOrdem">Cadastrar</button>
-          </div>
-          <p v-if="erro">{{ erro }}</p>
-        </div>
-      </article>
-    </div>
-  </div>
-</template>
-
+.descricao {
+  display: flex;
+  width: 65em;
+  height: 8em;
+  border-radius: 10px;
+  margin-left: 5px;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  margin-bottom: 15px;
+}
+.botao.desc {
+  height: 1.5em;
+  width: 1.5em;
+  padding: 0;
+}
+.fas.fa-pencil {
+  font-size: 10px;
+}
+    #input_texto {
+        margin-top: 4px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 7px;
+        color: black;
+        padding: 5px;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+        margin-right: -15em;
+    }
+    #valor_contrato {
+        margin-top: 4px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 7px;
+        color: black;
+        padding: 5px;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+        margin-right: -15em;
+    }
+    #valor_multa {
+        margin-top: 4px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 7px;
+        color: black;
+        padding: 5px;
+        margin-bottom: 0;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    }
+    #input_data {
+        text-align: center;
+        width: 10em;
+        border-radius: 7px;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; 
+    }
+    #clausulas_contrato {
+        width: 40em;
+        margin-top: -20px;
+        height: 5em !important;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; 
+        border: 1px solid white;
+        padding: 10px;
+  
+    }
+    .screen {
+        margin-top: 20px;
+        min-height: 50rem;
+        border-radius: 1px;
+        background-color: white;
+        width: 95%;
+        margin-left: 9%;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+        }
+    /* HEADER */
+    hr{
+      color: white;
+    }
+    .title {
+      display: inline-block;
+    }
+    .busca {
+      margin-left: 60%;
+      display: inline-block;
+      box-shadow: rgba(99, 99, 99, 0.256) 0px 2px 8px 0px;
+      border-radius: 0px;
+      padding: 10px;
+      font-size: 10px;
+    }
+    .btn-buscar:hover {
+      color: rgb(98, 98, 98);
+      background-color: white;
+      height: 30px;
+      width: 30px;
+      border: 1px solid rgb(98, 98, 98);
+      font-size: 15px;
+      padding: 0;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+    .btn-buscar {
+      height: 30px;
+      width: 30px;
+      padding: 0;
+      transition-duration: .1s;
+      color: #fcfcfb;
+      background-color:rgb(255, 187, 0);
+      border: 1px solid rgb(255, 187, 0);
+      font-size: 15px;
+    }
+    .header{
+      padding: 10px;
+      color: rgb(98, 98, 98);
+      margin-left: 5%;
+      margin-top: 20px;
+      width: 90%;
+      border-radius: 6px;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+    .novo {
+      color: #fcfcfb;
+      background-color: rgb(255, 187, 0);
+      border: 1px solidrgb(255, 187, 0);
+      font-size: 14px;
+    }
+    .novo:hover {
+      color: rgb(98, 98, 98);
+      background-color: white;
+      border: 1px solid rgb(98, 98, 98);
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+    /* TABELA */
+    .tabela {
+    margin-top: 30px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+    th {
+      font-size: 12px;
+      width: 10em;
+    } 
+    .extenso {
+      width: 30em;
+    }
+    
+    td{
+      text-align  : left;
+      color: rgb(84, 84, 84);
+      font-size: 14px;
+      padding: 10px;
+    }
+    p {
+      text-align: left;
+      font-size: 13px;
+    }
+    .id {
+      font-size: 13px;
+      text-align: left;
+      color: black;
+    }
+     .link {
+        text-decoration: none;
+        color:black;
+        padding: 5px;
+        border-radius: 9px;
+    }
+    .link:hover {
+        text-decoration: none;
+        color:black;
+        font-weight: bold;
+        padding: 5px;
+        border-radius: 9px;
+    }
+    
+    table{
+      width: 90%;
+    }
+    tr:hover{
+      background-color: rgb(255, 255, 255);
+      transition-duration: .18s;
+      height: 2.55em;
+      transform: translate(2px, 3%);
+      box-shadow: rgba(0, 0, 0, 0.189) 0px 3px 8px;
+    }
+    tr{
+      transform: translate(2px, 3%);
+      transition-duration: 1.5s;
+    }
+    td:hover{
+      color: black;
+    }
+    tr {
+      padding: 3px;
+    }
+    
+    /* FORM */
+    
+    
+    /* The popup form - hidden by default */
+    .form-popup {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      align-items: center;
+      margin-bottom: 20px;
+      z-index: 9;
+    }
+    
+    /* Add styles to the form container */
+    .form-container {
+      max-width: 500px;
+      min-width: 1000px;
+      padding: 10px;
+      height: 35em;
+      transition-duration: .5s;
+      margin-left: 10%;
+      border: 1px solid rgba(256,187,0,0.8);
+      background-color: white;
+      /* border: 1px solid rgba(0, 0, 0, 0.192); */
+      border-radius: 10px;
+      box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+    
+    }
+    
+    /* Full-width input fields */
+    .form-container input[type=text], .form-container input[type=password] {
+      width: 20em;
+      padding: 15px;
+      margin: 5px 0 22px 0;
+      border: none;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.185);
+    
+    }
+    select {
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+    
+    /* When the inputs get focus, do something */
+    .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+      background-color: #ffffff;
+      outline: none;
+      border: 1px solid rgb(255, 187, 0);
+      box-shadow: rgba(255, 187, 0, 0.11) 0px 2px 8px 0px;
+    
+    }
+    
+    /* Set a style for the submit/login button 
+    
+    */
+    .form-container .btn {
+      background-color: #04AA6D;
+      color: white;
+      padding: 16px 20px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom:10px;
+      opacity: 0.8;
+    }
+    
+    /* Add a red background color to the cancel button */
+    .form-container .cancel {
+      background-color: red;
+      width: 5em;
+      height: 2.5em;
+    
+      padding: 0;
+      
+    }
+    
+    .form-container .cadastrar {
+      background-color: rgb(2, 178, 20);
+      width: 5em;
+      height: 2.5em;
+      padding: 0;
+      margin-right: 10px !important;
+      
+      
+    }
+    .cliente {
+      margin-bottom: 20px;
+    }
+    /* Add some hover effects to buttons */
+    .form-container .btn:hover, .novo:hover {
+      opacity: 1;
+    }
+    </style>
+    
 <script setup >
 import { onMounted } from 'vue'
 import axios from 'axios'
@@ -427,7 +713,16 @@ function statusOptionsOrdem(currentStatus) {
   }
   return options
 }
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+  document.getElementById("screen").style.filter = "blur(8px)";
+}
 
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+  document.getElementById("screen").style.filter = "blur(0px)";
+
+}
 function showSelectOrdem(ID) {
   document.getElementById("sto"+ID).hidden=false;
 }
@@ -459,100 +754,3 @@ onMounted(() => {
   buscarServicos()
 })
 </script>
-
-<style>
-.texta {
-  margin-top: 10px;
-}
-.botao {
-  font-size: 15px;
-  background-color: rgb(255, 187, 0); 
-  padding: 5px;
-
-}
-.botao:hover {
-  font-size: 15px;
-  background-color: rgba(0, 0, 0, 0);
-  padding: 5px;
-  color:  rgba(0, 0, 0, 0.568); 
-
-}
-.select {
-  margin-top: 10px;
-  width: auto;
-}
-.botaoAprovacao {
-  font-size: 14px;
-  padding: 5px;
-  background-color: white;
-  color: rgba(0, 0, 0, 0.705);
-  border: 1px solid rgb(255, 187, 0); 
-}
-.botaoAprovacao:hover {
-  font-size: 14px;
-  padding: 5px;
-  background-color: white;
-  color: rgba(0, 0, 0, 0.705);
-  border: 1px solid  rgba(0, 0, 0, 0.705);
-}
-.laudo {
-  background-color: blueviolet !important;
-}
-
-.itensLaudo {
-  margin-top: 5%;
-}
-@media (min-width: 80%) {
-  .about {
-    min-height: 80%;
-    display: flex;
-    align-items: center;
-  }
-}
-
-template {
-  font-family: 'Quark';
-  font-weight: 700;
-  font-style: normal;
-}
-input {
-  background-color: rgba(241, 241, 241, 0.13);
-  padding-right: auto;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-color: aliceblue;
-  margin-left: 1%;
-  margin-right: 1%;
-  border-radius: 20px;
-}
-
-button {
-  padding-top: 0.5%;
-  padding-bottom: 0.5%;
-  padding-left: 1%;
-  padding-right: 1%;
-  margin: 0.3%;
-  background-color: rgb(255, 187, 0);
-  border: 1px;
-  border-color: black;
-  border-radius: 5px;
-  color: white;
-  font-family: 'Quark';
-  font-weight: 700;
-  font-style: normal;
-}
-
-button:hover {
-  background-color: white;
-  transition-duration: 0.4s;
-  color: rgb(255, 187, 0);
-  box-shadow: 1px 1px 2px rgb(255, 187, 0);
-  padding-top: 0.6%;
-  padding-bottom: 0.6%;
-  padding-left: 1.2%;
-  padding-right: 1.2%;
-  border-style: solid;
-  border-color: rgb(255, 187, 0);
-  text-shadow: 1px black;
-}
-</style>

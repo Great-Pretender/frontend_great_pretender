@@ -179,7 +179,7 @@
   tr:hover{
     background-color: rgb(0, 0, 0);
     transition-duration: .18s;
-    height: 2.55em;
+    height: 2.1em !important;
     transform: translate(2px, 3%);
     box-shadow: rgba(0, 0, 0, 0.189) 0px 3px 8px;
   }
@@ -192,6 +192,7 @@
   }
   tr {
     padding: 3px;
+    height: 2em;
   }
   
   /* FORM */
