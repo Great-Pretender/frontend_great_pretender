@@ -1,6 +1,20 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 
+//Variaveis do localstorage
+var TokenStorage = localStorage.getItem("Token");
+var IdStorage = localStorage.getItem("id")
+var UserStorage = localStorage.getItem("cargo")
+
+async function logout(){
+  localStorage.setItem("usuario", "")
+  localStorage.setItem("senha", "")
+  localStorage.setItem("Token", "")
+  localStorage.setItem("Cargo", "")
+
+  window.location.href='/login'
+}
+
 console.log("teste")
 </script>
 <template>
@@ -35,11 +49,11 @@ console.log("teste")
         <i class="fas fa-table"></i>
         <span>OS</span>
       </RouterLink>
-      <RouterLink to="/usuario">
+      <RouterLink to="/usuario" v-if="UserStorage == 'ROLE_ADMIN'">
         <i class="fas fa-users"></i>
         <span>Usuários</span>
       </RouterLink>
-      <RouterLink to="/client">
+      <RouterLink to="/client" v-if="UserStorage == 'ROLE_ADMIN'">
         <i class="fas fa-address-book"></i>
         <span>Clientes</span>
       </RouterLink>
@@ -55,9 +69,13 @@ console.log("teste")
         <i class="fas fa-building"></i>
         <span>Setores</span>
       </RouterLink>
-      <RouterLink to="/contrato">
+      <RouterLink to="/contrato" v-if="UserStorage == 'ROLE_ADMIN'">
         <i class="fas fa-file-lines"></i>
         <span>Contratos</span>
+      </RouterLink>
+
+      <RouterLink to="/login">
+        <button id="logout" @click="logout">Logout</button>
       </RouterLink>
     </div> 
     

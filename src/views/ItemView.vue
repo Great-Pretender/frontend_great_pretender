@@ -136,6 +136,7 @@
           'Authorization': TokenStorage
         }
         })).data
+        console.log(itens.value)
       }
       catch(ex) {
         erro.value = (ex as Error).message
