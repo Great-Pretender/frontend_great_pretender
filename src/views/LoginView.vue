@@ -52,6 +52,7 @@ async function login() {
     for (i = 0; i < identificacao.value.length; i++) {
         if(identificacao.value[i].nome == usuario.value){
             localStorage.setItem("id", identificacao.value[i].id)
+            localStorage.setItem("cargo", identificacao.value[i].cargo)
         }
 
     } 

@@ -10,14 +10,14 @@ async function logout(){
   localStorage.setItem("usuario", "")
   localStorage.setItem("senha", "")
   localStorage.setItem("Token", "")
-  localStorage.setItem("Cargo", "")
+  localStorage.setItem("cargo", "")
 
-  window.location.href='/login'
+  window.location.href='/'
 }
 
 console.log("teste")
 </script>
-<template>
+<template >
     <!-- <div>
         <nav>
           <ul>
@@ -34,7 +34,7 @@ console.log("teste")
       <hr>
     </div> -->
 
-<input type="checkbox" id="check">
+<input type="checkbox" id="check" v-if="TokenStorage != ''">
     <label for="check">
       <i class="fas fa-bars" id="btn"></i>
       <i class="fas fa-times" id="cancel"></i>
@@ -57,7 +57,7 @@ console.log("teste")
         <i class="fas fa-address-book"></i>
         <span>Clientes</span>
       </RouterLink>
-      <RouterLink to="/laudo">
+      <RouterLink to="/laudo" v-if="UserStorage == 'ROLE_ADMIN'">
         <i class="fas fa-table"></i>
         <span>Laudos</span>
       </RouterLink>
@@ -69,7 +69,7 @@ console.log("teste")
         <i class="fas fa-wrench"></i>
         <span>Itens</span>
       </RouterLink>
-      <RouterLink to="/setor">
+      <RouterLink to="/setor" v-if="UserStorage == 'ROLE_ADMIN'">
         <i class="fas fa-building"></i>
         <span>Setores</span>
       </RouterLink>
@@ -78,7 +78,7 @@ console.log("teste")
         <span>Contratos</span>
       </RouterLink>
 
-      <RouterLink to="/login">
+      <RouterLink to="/">
         <button id="logout" @click="logout">Logout</button>
       </RouterLink>
     </div> 

@@ -458,6 +458,8 @@ var statusAprovacao = ref('')
 
 //Variaveis do localstorage
 var TokenStorage = localStorage.getItem("Token");
+var IdStorage = localStorage.getItem("id")
+var UserStorage = localStorage.getItem("cargo")
 
 async function buscarClientes() {
   try {
@@ -496,7 +498,9 @@ async function buscarServicos() {
 }
 
 async function buscarOrdens() {
-  try {
+  
+  if(UserStorage == "ROLE_ADMIN"){
+    try {
     ordens.value = (await axios.get('ordemdeservico', {
       headers:{
         'Authorization': TokenStorage
@@ -505,6 +509,26 @@ async function buscarOrdens() {
   } catch (error) {
     console.error('Erro! :' + error)
   }
+  }else{
+  try {
+    usuario.value = (await axios.get(`usuario/${IdStorage}`, {
+      headers:{
+      'Authorization': TokenStorage
+      }
+      })).data
+
+      ordens.value = (await axios.post('ordemdeservico/idSetor',{
+      id: usuario.value.setor.id
+      }, {
+      headers:{
+      'Authorization': TokenStorage
+      }
+      })).data
+
+  } catch (error) {
+    console.error('Erro! :' + error)
+  }
+}
 }
 
 const cli = ref()
