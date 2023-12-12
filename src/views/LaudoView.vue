@@ -17,17 +17,17 @@
       <h1>Ordens Aprovadas</h1>
       <table>
         <thead>
-          <th>ID</th>
+          <!-- <th>ID</th>
           <th>SETOR</th>
           <th>CLIENTE</th>
           <th>DESCRICAO</th>
           <th>DATA INICIO</th>
-          <th>DATA FIM</th>
+          <th>DATA FIM</th> -->
         </thead>
 
         <tbody>
           <tr v-for="ordem in ordens" :key="ordem.id">
-            <td>
+            <!--  <td>
               <RouterLink
                 :to="{ name: 'AtribuicaoOrdemDeServico', params: { id: ordem.id } }"
                 class="link"
@@ -40,7 +40,32 @@
               {{ ordem.descricao }}
             </td>
             <td>{{ ordem.data_inicio }}</td>
-            <td>{{ ordem.data_fim }}</td>
+            <td>{{ ordem.data_fim }}</td> -->
+
+            <div class="LAUDO">
+              <div class="variable">
+                <label for="name">Cliente:</label>
+                <div class="output" id="name">{{ ordem.cliente.nome_fantasia }}</div>
+              </div>
+
+              <div class="variable">
+                <label for="number">Ordem Realizada:</label>
+                <div class="output" id="number">{{ ordem.id }}</div>
+              </div>
+
+              <div class="variable">
+                <label for="date">Data:</label>
+                <div class="output" id="date">
+                  <th>INICIO: {{ ordem.data_inicio }}</th>
+                  <th>FIM {{ ordem.data_fim }}</th>
+                </div>
+              </div>
+
+              <div class="variable">
+                <label for="description">Descrição:</label>
+                <div class="output" id="description">{{ ordem.descricao }}</div>
+              </div>
+            </div>
           </tr>
         </tbody>
       </table>
@@ -150,6 +175,45 @@ onMounted(() => {
 </script>
 
 <style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+.LAUDO {
+  width: 21cm;
+  height: 29.7cm;
+  margin: 1cm auto;
+  border: 1px solid #ccc;
+  padding: 1cm;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.variable {
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.output {
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+@media print {
+  body {
+    margin: 0;
+  }
+
+  .report {
+    box-shadow: none;
+    border: none;
+  }
+}
 .texta {
   margin-top: 10px;
 }
